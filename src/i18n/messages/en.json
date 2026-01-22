@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "title": "World Clap Day - A Global Moment of Unity",
+    "description": "Join the worldwide movement. World Clap Day is a global moment of human connection and celebration."
+  },
+  "nav": {
+    "supportUs": "Support Us",
+    "partners": "Partners",
+    "cart": "Cart",
+    "checkout": "Checkout"
+  },
+  "home": {
+    "title": "World Clap Day",
+    "subtitle": "A global moment of human connection and celebration",
+    "missionTitle": "One moment. One world. One clap.",
+    "missionText": "World Clap Day is building a worldwide tradition that brings humanity together through one shared action. Join millions around the globe in a synchronized moment of unity and celebration.",
+    "joinMovement": "Join the Movement",
+    "becomePartner": "Become a Partner"
+  },
+  "countdown": {
+    "days": "DAYS",
+    "hours": "HOURS",
+    "minutes": "MINUTES",
+    "seconds": "SECONDS"
+  },
+  "counter": {
+    "title": "Clappers who joined the mission"
+  },
+  "email": {
+    "placeholder": "Enter your email",
+    "consent": "I want to receive email updates about World Clap Day, including announcements and reminders. I can unsubscribe at any time.",
+    "subscribe": "Subscribe",
+    "subscribing": "Subscribing...",
+    "success": "You're in!"
+  },
+  "worldTimes": {
+    "date": "16th August 2026",
+    "clappersWall": "Clapper's Wall",
+    "clappersWallText": "An area dedicated to all our supporters. Wanna join?",
+    "supportUs": "Support us!"
+  },
+  "supportPage": {
+    "title": "Support the World Clap Day",
+    "subtitle": "World Clap Day is a community driven initiative.",
+    "description": "Your support helps us build the platform, create media, and coordinate a truly global moment.",
+    "sectionTitle": "Support the movement",
+    "disclaimer1": "Contributions are voluntary support payments made to",
+    "companyName": "World Clap Day LTD",
+    "disclaimer2": "a UK registered company.",
+    "disclaimer3": "Support is not a purchase of goods or services. Read our",
+    "supportPolicy": "Support Policy",
+    "disclaimer4": "If you made a payment in error, contact us at",
+    "disclaimer5": "Refunds may be considered on a case by case basis at our discretion.",
+    "wallOfClaps": "Wall of Claps",
+    "wallOfClapsText": "The Wall of Claps is the permanent record of founding supporters. Every name is a clap. Every clap is a signal that we can unite."
+  },
+  "donationCard": {
+    "addToCart": "Add to Cart",
+    "addedToCart": "Added to Cart"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "emptyText": "Add some donations to support World Clap Day!",
+    "browseTiers": "Browse Donation Tiers",
+    "clearCart": "Clear cart",
+    "total": "Total",
+    "continueBrowsing": "Continue Browsing",
+    "proceedToCheckout": "Proceed to Checkout"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "backToCart": "Back to Cart",
+    "emptyCart": "Your cart is empty",
+    "emptyCartText": "Add some donations before checking out.",
+    "orderSummary": "Order Summary",
+    "total": "Total",
+    "supporterNameLabel": "Your Name for Wall of Claps",
+    "supporterNameDescription": "This name will appear on the Wall of Claps. Leave blank to remain anonymous.",
+    "supporterNamePlaceholder": "Enter your name (optional)",
+    "paymentMethod": "Payment Method",
+    "payWithCard": "Pay with Card",
+    "redirecting": "Redirecting...",
+    "or": "or",
+    "securePayment": "Your payment is secure and encrypted",
+    "canceledTitle": "Your payment was canceled. No charges were made.",
+    "paymentFailed": "Payment failed. Please try again."
+  },
+  "success": {
+    "title": "Thank You!",
+    "subtitle": "Your support means the world to us. You're now part of the global movement!",
+    "wallOfClapsTitle": "You're on the Wall of Claps!",
+    "wallOfClapsText": "Your name will appear on the Wall of Claps, joining thousands of supporters from around the world.",
+    "whatsNext": "What happens next?",
+    "step1": "You'll receive a confirmation email shortly",
+    "step2": "Your name will appear on the Wall of Claps",
+    "step3": "Share the movement with friends and family",
+    "step4": "Mark your calendar for World Clap Day!",
+    "returnHome": "Return Home",
+    "shareOnX": "Share on X/Twitter"
+  },
+  "partners": {
+    "title": "Partner with World Clap Day",
+    "subtitle": "World Clap Day is a global moment of unity.",
+    "description1": "We're building a worldwide tradition that brings humanity together through one shared action.",
+    "description2": "We collaborate with aligned organisations, cities, regions, and service partners to scale the movement and create meaningful global impact.",
+    "whoWePartner": "Who we partner with",
+    "whatPartnershipIncludes": "What partnership can include",
+    "partnershipItems": {
+      "item1": "Co-branded campaigns and global activation",
+      "item2": "Media collaborations and storytelling",
+      "item3": "Official city and national participation",
+      "item4": "Community events and live experiences",
+      "item5": "Digital and technology support",
+      "item6": "Content creation and global distribution"
+    },
+    "differentIdea": "Have a different partnership idea?",
+    "openToCollaborations": "We're always open to creative collaborations.",
+    "inquiryForm": "Partner Inquiry Form"
+  },
+  "partnerInquiry": {
+    "title": "Partner Inquiry Form",
+    "subtitle": "Interested in partnering with World Clap Day? Fill out the form below and our team will get back to you.",
+    "backToPartners": "Back to Partners",
+    "contactText": "Have questions before submitting? Contact us at"
+  },
+  "footer": {
+    "supportPolicy": "Support Policy",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "legalText": "By using this website, you agree to our",
+    "and": "and",
+    "copyright": "Copyright © {year} World Clap Day"
+  },
+  "common": {
+    "loading": "Loading..."
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "title": "Weltapplaustag - Ein Globaler Moment der Einheit",
+    "description": "Schließen Sie sich der weltweiten Bewegung an. Der Weltapplaustag ist ein globaler Moment menschlicher Verbundenheit und Feier."
+  },
+  "nav": {
+    "supportUs": "Unterstützen",
+    "partners": "Partner",
+    "cart": "Warenkorb",
+    "checkout": "Kasse"
+  },
+  "home": {
+    "title": "Weltapplaustag",
+    "subtitle": "Ein globaler Moment menschlicher Verbundenheit und Feier",
+    "missionTitle": "Ein Moment. Eine Welt. Ein Applaus.",
+    "missionText": "Der Weltapplaustag baut eine weltweite Tradition auf, die die Menschheit durch eine gemeinsame Aktion vereint. Schließen Sie sich Millionen auf der ganzen Welt in einem synchronisierten Moment der Einheit und Feier an.",
+    "joinMovement": "Der Bewegung Beitreten",
+    "becomePartner": "Partner Werden"
+  },
+  "countdown": {
+    "days": "TAGE",
+    "hours": "STUNDEN",
+    "minutes": "MINUTEN",
+    "seconds": "SEKUNDEN"
+  },
+  "counter": {
+    "title": "Klatscher, die sich der Mission angeschlossen haben"
+  },
+  "email": {
+    "placeholder": "E-Mail eingeben",
+    "consent": "Ich möchte E-Mail-Updates zum Weltapplaustag erhalten, einschließlich Ankündigungen und Erinnerungen. Ich kann mich jederzeit abmelden.",
+    "subscribe": "Abonnieren",
+    "subscribing": "Wird abonniert...",
+    "success": "Sie sind dabei!"
+  },
+  "worldTimes": {
+    "date": "16. August 2026",
+    "clappersWall": "Wand der Klatscher",
+    "clappersWallText": "Ein Bereich, der allen unseren Unterstützern gewidmet ist. Möchten Sie mitmachen?",
+    "supportUs": "Unterstützen Sie uns!"
+  },
+  "supportPage": {
+    "title": "Unterstützen Sie den Weltapplaustag",
+    "subtitle": "Der Weltapplaustag ist eine von der Gemeinschaft getragene Initiative.",
+    "description": "Ihre Unterstützung hilft uns, die Plattform aufzubauen, Medien zu erstellen und einen wirklich globalen Moment zu koordinieren.",
+    "sectionTitle": "Die Bewegung unterstützen",
+    "disclaimer1": "Beiträge sind freiwillige Unterstützungszahlungen an",
+    "companyName": "World Clap Day LTD",
+    "disclaimer2": "ein in Großbritannien registriertes Unternehmen.",
+    "disclaimer3": "Unterstützung ist kein Kauf von Waren oder Dienstleistungen. Lesen Sie unsere",
+    "supportPolicy": "Unterstützungsrichtlinie",
+    "disclaimer4": "Wenn Sie versehentlich bezahlt haben, kontaktieren Sie uns unter",
+    "disclaimer5": "Rückerstattungen können im Einzelfall nach unserem Ermessen in Betracht gezogen werden.",
+    "wallOfClaps": "Wand des Applauses",
+    "wallOfClapsText": "Die Wand des Applauses ist das permanente Register der Gründungsunterstützer. Jeder Name ist ein Applaus. Jeder Applaus ist ein Zeichen, dass wir uns vereinen können."
+  },
+  "donationCard": {
+    "addToCart": "In den Warenkorb",
+    "addedToCart": "Hinzugefügt"
+  },
+  "cart": {
+    "title": "Ihr Warenkorb",
+    "empty": "Ihr Warenkorb ist leer",
+    "emptyText": "Fügen Sie Spenden hinzu, um den Weltapplaustag zu unterstützen!",
+    "browseTiers": "Spendenstufen Ansehen",
+    "clearCart": "Warenkorb leeren",
+    "total": "Gesamt",
+    "continueBrowsing": "Weiter Stöbern",
+    "proceedToCheckout": "Zur Kasse"
+  },
+  "checkout": {
+    "title": "Kasse",
+    "backToCart": "Zurück zum Warenkorb",
+    "emptyCart": "Ihr Warenkorb ist leer",
+    "emptyCartText": "Fügen Sie Spenden hinzu, bevor Sie zur Kasse gehen.",
+    "orderSummary": "Bestellübersicht",
+    "total": "Gesamt",
+    "supporterNameLabel": "Ihr Name für die Wand des Applauses",
+    "supporterNameDescription": "Dieser Name erscheint auf der Wand des Applauses. Lassen Sie es leer, um anonym zu bleiben.",
+    "supporterNamePlaceholder": "Namen eingeben (optional)",
+    "paymentMethod": "Zahlungsmethode",
+    "payWithCard": "Mit Karte Bezahlen",
+    "redirecting": "Weiterleitung...",
+    "or": "oder",
+    "securePayment": "Ihre Zahlung ist sicher und verschlüsselt",
+    "canceledTitle": "Ihre Zahlung wurde abgebrochen. Es wurden keine Gebühren erhoben.",
+    "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut."
+  },
+  "success": {
+    "title": "Vielen Dank!",
+    "subtitle": "Ihre Unterstützung bedeutet uns sehr viel. Sie sind jetzt Teil der globalen Bewegung!",
+    "wallOfClapsTitle": "Sie sind auf der Wand des Applauses!",
+    "wallOfClapsText": "Ihr Name wird auf der Wand des Applauses erscheinen und sich Tausenden von Unterstützern aus der ganzen Welt anschließen.",
+    "whatsNext": "Was passiert als nächstes?",
+    "step1": "Sie erhalten in Kürze eine Bestätigungs-E-Mail",
+    "step2": "Ihr Name wird auf der Wand des Applauses erscheinen",
+    "step3": "Teilen Sie die Bewegung mit Freunden und Familie",
+    "step4": "Markieren Sie den Weltapplaustag in Ihrem Kalender!",
+    "returnHome": "Zur Startseite",
+    "shareOnX": "Auf X/Twitter Teilen"
+  },
+  "partners": {
+    "title": "Partner des Weltapplaustags werden",
+    "subtitle": "Der Weltapplaustag ist ein globaler Moment der Einheit.",
+    "description1": "Wir bauen eine weltweite Tradition auf, die die Menschheit durch eine gemeinsame Aktion vereint.",
+    "description2": "Wir arbeiten mit gleichgesinnten Organisationen, Städten, Regionen und Servicepartnern zusammen, um die Bewegung zu skalieren und eine bedeutende globale Wirkung zu erzielen.",
+    "whoWePartner": "Mit wem wir zusammenarbeiten",
+    "whatPartnershipIncludes": "Was eine Partnerschaft beinhalten kann",
+    "partnershipItems": {
+      "item1": "Co-Branding-Kampagnen und globale Aktivierung",
+      "item2": "Medienkooperationen und Storytelling",
+      "item3": "Offizielle Stadt- und Nationalbeteiligung",
+      "item4": "Community-Events und Live-Erlebnisse",
+      "item5": "Digitaler und technologischer Support",
+      "item6": "Content-Erstellung und globale Distribution"
+    },
+    "differentIdea": "Haben Sie eine andere Partnerschaftsidee?",
+    "openToCollaborations": "Wir sind immer offen für kreative Zusammenarbeit.",
+    "inquiryForm": "Partneranfrageformular"
+  },
+  "partnerInquiry": {
+    "title": "Partneranfrageformular",
+    "subtitle": "Interesse an einer Partnerschaft mit dem Weltapplaustag? Füllen Sie das Formular unten aus und unser Team wird sich bei Ihnen melden.",
+    "backToPartners": "Zurück zu Partnern",
+    "contactText": "Fragen vor der Einreichung? Kontaktieren Sie uns unter"
+  },
+  "footer": {
+    "supportPolicy": "Unterstützungsrichtlinie",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "termsOfUse": "Nutzungsbedingungen",
+    "legalText": "Durch die Nutzung dieser Website stimmen Sie unseren",
+    "and": "und",
+    "copyright": "Copyright © {year} Weltapplaustag"
+  },
+  "common": {
+    "loading": "Wird geladen..."
+  }
+}

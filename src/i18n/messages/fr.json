@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "title": "Journée Mondiale de l'Applaudissement - Un Moment Mondial d'Unité",
+    "description": "Rejoignez le mouvement mondial. La Journée Mondiale de l'Applaudissement est un moment global de connexion humaine et de célébration."
+  },
+  "nav": {
+    "supportUs": "Nous Soutenir",
+    "partners": "Partenaires",
+    "cart": "Panier",
+    "checkout": "Paiement"
+  },
+  "home": {
+    "title": "Journée Mondiale de l'Applaudissement",
+    "subtitle": "Un moment global de connexion humaine et de célébration",
+    "missionTitle": "Un moment. Un monde. Un applaudissement.",
+    "missionText": "La Journée Mondiale de l'Applaudissement construit une tradition mondiale qui unit l'humanité à travers une action partagée. Rejoignez des millions de personnes à travers le monde dans un moment synchronisé d'unité et de célébration.",
+    "joinMovement": "Rejoindre le Mouvement",
+    "becomePartner": "Devenir Partenaire"
+  },
+  "countdown": {
+    "days": "JOURS",
+    "hours": "HEURES",
+    "minutes": "MINUTES",
+    "seconds": "SECONDES"
+  },
+  "counter": {
+    "title": "Applaudisseurs qui ont rejoint la mission"
+  },
+  "email": {
+    "placeholder": "Entrez votre email",
+    "consent": "Je souhaite recevoir des mises à jour par email sur la Journée Mondiale de l'Applaudissement, y compris les annonces et les rappels. Je peux me désabonner à tout moment.",
+    "subscribe": "S'abonner",
+    "subscribing": "Inscription...",
+    "success": "Vous êtes inscrit !"
+  },
+  "worldTimes": {
+    "date": "16 Août 2026",
+    "clappersWall": "Mur des Applaudisseurs",
+    "clappersWallText": "Un espace dédié à tous nos supporters. Vous voulez nous rejoindre ?",
+    "supportUs": "Soutenez-nous !"
+  },
+  "supportPage": {
+    "title": "Soutenir la Journée Mondiale de l'Applaudissement",
+    "subtitle": "La Journée Mondiale de l'Applaudissement est une initiative communautaire.",
+    "description": "Votre soutien nous aide à construire la plateforme, créer du contenu média et coordonner un moment véritablement mondial.",
+    "sectionTitle": "Soutenir le mouvement",
+    "disclaimer1": "Les contributions sont des paiements de soutien volontaires effectués à",
+    "companyName": "World Clap Day LTD",
+    "disclaimer2": "une société enregistrée au Royaume-Uni.",
+    "disclaimer3": "Le soutien n'est pas un achat de biens ou de services. Lisez notre",
+    "supportPolicy": "Politique de Soutien",
+    "disclaimer4": "Si vous avez effectué un paiement par erreur, contactez-nous à",
+    "disclaimer5": "Les remboursements peuvent être envisagés au cas par cas à notre discrétion.",
+    "wallOfClaps": "Mur des Applaudissements",
+    "wallOfClapsText": "Le Mur des Applaudissements est le registre permanent des supporters fondateurs. Chaque nom est un applaudissement. Chaque applaudissement est un signal que nous pouvons nous unir."
+  },
+  "donationCard": {
+    "addToCart": "Ajouter au Panier",
+    "addedToCart": "Ajouté au Panier"
+  },
+  "cart": {
+    "title": "Votre Panier",
+    "empty": "Votre panier est vide",
+    "emptyText": "Ajoutez des dons pour soutenir la Journée Mondiale de l'Applaudissement !",
+    "browseTiers": "Voir les Niveaux de Don",
+    "clearCart": "Vider le panier",
+    "total": "Total",
+    "continueBrowsing": "Continuer à Parcourir",
+    "proceedToCheckout": "Procéder au Paiement"
+  },
+  "checkout": {
+    "title": "Paiement",
+    "backToCart": "Retour au Panier",
+    "emptyCart": "Votre panier est vide",
+    "emptyCartText": "Ajoutez des dons avant de payer.",
+    "orderSummary": "Récapitulatif de la Commande",
+    "total": "Total",
+    "supporterNameLabel": "Votre Nom pour le Mur des Applaudissements",
+    "supporterNameDescription": "Ce nom apparaîtra sur le Mur des Applaudissements. Laissez vide pour rester anonyme.",
+    "supporterNamePlaceholder": "Entrez votre nom (optionnel)",
+    "paymentMethod": "Mode de Paiement",
+    "payWithCard": "Payer par Carte",
+    "redirecting": "Redirection...",
+    "or": "ou",
+    "securePayment": "Votre paiement est sécurisé et crypté",
+    "canceledTitle": "Votre paiement a été annulé. Aucun frais n'a été prélevé.",
+    "paymentFailed": "Le paiement a échoué. Veuillez réessayer."
+  },
+  "success": {
+    "title": "Merci !",
+    "subtitle": "Votre soutien compte énormément pour nous. Vous faites maintenant partie du mouvement mondial !",
+    "wallOfClapsTitle": "Vous êtes sur le Mur des Applaudissements !",
+    "wallOfClapsText": "Votre nom apparaîtra sur le Mur des Applaudissements, rejoignant des milliers de supporters du monde entier.",
+    "whatsNext": "Et ensuite ?",
+    "step1": "Vous recevrez bientôt un email de confirmation",
+    "step2": "Votre nom apparaîtra sur le Mur des Applaudissements",
+    "step3": "Partagez le mouvement avec vos amis et votre famille",
+    "step4": "Notez la Journée Mondiale de l'Applaudissement dans votre calendrier !",
+    "returnHome": "Retour à l'Accueil",
+    "shareOnX": "Partager sur X/Twitter"
+  },
+  "partners": {
+    "title": "Devenir Partenaire de la Journée Mondiale de l'Applaudissement",
+    "subtitle": "La Journée Mondiale de l'Applaudissement est un moment mondial d'unité.",
+    "description1": "Nous construisons une tradition mondiale qui unit l'humanité à travers une action partagée.",
+    "description2": "Nous collaborons avec des organisations alignées, des villes, des régions et des partenaires de services pour développer le mouvement et créer un impact mondial significatif.",
+    "whoWePartner": "Avec qui nous collaborons",
+    "whatPartnershipIncludes": "Ce que le partenariat peut inclure",
+    "partnershipItems": {
+      "item1": "Campagnes co-brandées et activation mondiale",
+      "item2": "Collaborations médiatiques et storytelling",
+      "item3": "Participation officielle des villes et des nations",
+      "item4": "Événements communautaires et expériences en direct",
+      "item5": "Support digital et technologique",
+      "item6": "Création de contenu et distribution mondiale"
+    },
+    "differentIdea": "Vous avez une autre idée de partenariat ?",
+    "openToCollaborations": "Nous sommes toujours ouverts aux collaborations créatives.",
+    "inquiryForm": "Formulaire de Demande de Partenariat"
+  },
+  "partnerInquiry": {
+    "title": "Formulaire de Demande de Partenariat",
+    "subtitle": "Intéressé par un partenariat avec la Journée Mondiale de l'Applaudissement ? Remplissez le formulaire ci-dessous et notre équipe vous contactera.",
+    "backToPartners": "Retour aux Partenaires",
+    "contactText": "Des questions avant de soumettre ? Contactez-nous à"
+  },
+  "footer": {
+    "supportPolicy": "Politique de Soutien",
+    "privacyPolicy": "Politique de Confidentialité",
+    "termsOfUse": "Conditions d'Utilisation",
+    "legalText": "En utilisant ce site web, vous acceptez nos",
+    "and": "et",
+    "copyright": "Copyright © {year} Journée Mondiale de l'Applaudissement"
+  },
+  "common": {
+    "loading": "Chargement..."
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "title": "Día Mundial del Aplauso - Un Momento Global de Unidad",
+    "description": "Únete al movimiento mundial. El Día Mundial del Aplauso es un momento global de conexión humana y celebración."
+  },
+  "nav": {
+    "supportUs": "Apóyanos",
+    "partners": "Socios",
+    "cart": "Carrito",
+    "checkout": "Pagar"
+  },
+  "home": {
+    "title": "Día Mundial del Aplauso",
+    "subtitle": "Un momento global de conexión humana y celebración",
+    "missionTitle": "Un momento. Un mundo. Un aplauso.",
+    "missionText": "El Día Mundial del Aplauso está construyendo una tradición mundial que une a la humanidad a través de una acción compartida. Únete a millones en todo el mundo en un momento sincronizado de unidad y celebración.",
+    "joinMovement": "Únete al Movimiento",
+    "becomePartner": "Conviértete en Socio"
+  },
+  "countdown": {
+    "days": "DÍAS",
+    "hours": "HORAS",
+    "minutes": "MINUTOS",
+    "seconds": "SEGUNDOS"
+  },
+  "counter": {
+    "title": "Aplaudidores que se unieron a la misión"
+  },
+  "email": {
+    "placeholder": "Ingresa tu correo electrónico",
+    "consent": "Quiero recibir actualizaciones por correo sobre el Día Mundial del Aplauso, incluyendo anuncios y recordatorios. Puedo cancelar mi suscripción en cualquier momento.",
+    "subscribe": "Suscribirse",
+    "subscribing": "Suscribiendo...",
+    "success": "¡Ya estás dentro!"
+  },
+  "worldTimes": {
+    "date": "16 de Agosto de 2026",
+    "clappersWall": "Muro de Aplaudidores",
+    "clappersWallText": "Un área dedicada a todos nuestros seguidores. ¿Quieres unirte?",
+    "supportUs": "¡Apóyanos!"
+  },
+  "supportPage": {
+    "title": "Apoya el Día Mundial del Aplauso",
+    "subtitle": "El Día Mundial del Aplauso es una iniciativa impulsada por la comunidad.",
+    "description": "Tu apoyo nos ayuda a construir la plataforma, crear contenido multimedia y coordinar un momento verdaderamente global.",
+    "sectionTitle": "Apoya el movimiento",
+    "disclaimer1": "Las contribuciones son pagos de apoyo voluntarios realizados a",
+    "companyName": "World Clap Day LTD",
+    "disclaimer2": "una empresa registrada en el Reino Unido.",
+    "disclaimer3": "El apoyo no es una compra de bienes o servicios. Lee nuestra",
+    "supportPolicy": "Política de Apoyo",
+    "disclaimer4": "Si realizaste un pago por error, contáctanos en",
+    "disclaimer5": "Los reembolsos pueden ser considerados caso por caso a nuestra discreción.",
+    "wallOfClaps": "Muro de Aplausos",
+    "wallOfClapsText": "El Muro de Aplausos es el registro permanente de los fundadores. Cada nombre es un aplauso. Cada aplauso es una señal de que podemos unirnos."
+  },
+  "donationCard": {
+    "addToCart": "Añadir al Carrito",
+    "addedToCart": "Añadido al Carrito"
+  },
+  "cart": {
+    "title": "Tu Carrito",
+    "empty": "Tu carrito está vacío",
+    "emptyText": "¡Añade algunas donaciones para apoyar el Día Mundial del Aplauso!",
+    "browseTiers": "Ver Niveles de Donación",
+    "clearCart": "Vaciar carrito",
+    "total": "Total",
+    "continueBrowsing": "Seguir Navegando",
+    "proceedToCheckout": "Proceder al Pago"
+  },
+  "checkout": {
+    "title": "Pagar",
+    "backToCart": "Volver al Carrito",
+    "emptyCart": "Tu carrito está vacío",
+    "emptyCartText": "Añade algunas donaciones antes de pagar.",
+    "orderSummary": "Resumen del Pedido",
+    "total": "Total",
+    "supporterNameLabel": "Tu Nombre para el Muro de Aplausos",
+    "supporterNameDescription": "Este nombre aparecerá en el Muro de Aplausos. Déjalo en blanco para permanecer anónimo.",
+    "supporterNamePlaceholder": "Ingresa tu nombre (opcional)",
+    "paymentMethod": "Método de Pago",
+    "payWithCard": "Pagar con Tarjeta",
+    "redirecting": "Redirigiendo...",
+    "or": "o",
+    "securePayment": "Tu pago es seguro y encriptado",
+    "canceledTitle": "Tu pago fue cancelado. No se realizó ningún cargo.",
+    "paymentFailed": "El pago falló. Por favor, intenta de nuevo."
+  },
+  "success": {
+    "title": "¡Gracias!",
+    "subtitle": "Tu apoyo significa mucho para nosotros. ¡Ahora eres parte del movimiento global!",
+    "wallOfClapsTitle": "¡Estás en el Muro de Aplausos!",
+    "wallOfClapsText": "Tu nombre aparecerá en el Muro de Aplausos, uniéndote a miles de seguidores de todo el mundo.",
+    "whatsNext": "¿Qué sigue?",
+    "step1": "Recibirás un correo de confirmación en breve",
+    "step2": "Tu nombre aparecerá en el Muro de Aplausos",
+    "step3": "Comparte el movimiento con amigos y familiares",
+    "step4": "¡Marca tu calendario para el Día Mundial del Aplauso!",
+    "returnHome": "Volver al Inicio",
+    "shareOnX": "Compartir en X/Twitter"
+  },
+  "partners": {
+    "title": "Asóciate con el Día Mundial del Aplauso",
+    "subtitle": "El Día Mundial del Aplauso es un momento global de unidad.",
+    "description1": "Estamos construyendo una tradición mundial que une a la humanidad a través de una acción compartida.",
+    "description2": "Colaboramos con organizaciones alineadas, ciudades, regiones y socios de servicios para escalar el movimiento y crear un impacto global significativo.",
+    "whoWePartner": "Con quién nos asociamos",
+    "whatPartnershipIncludes": "Qué puede incluir la asociación",
+    "partnershipItems": {
+      "item1": "Campañas de marca compartida y activación global",
+      "item2": "Colaboraciones mediáticas y narrativa",
+      "item3": "Participación oficial de ciudades y naciones",
+      "item4": "Eventos comunitarios y experiencias en vivo",
+      "item5": "Soporte digital y tecnológico",
+      "item6": "Creación de contenido y distribución global"
+    },
+    "differentIdea": "¿Tienes una idea de asociación diferente?",
+    "openToCollaborations": "Siempre estamos abiertos a colaboraciones creativas.",
+    "inquiryForm": "Formulario de Consulta de Socios"
+  },
+  "partnerInquiry": {
+    "title": "Formulario de Consulta de Socios",
+    "subtitle": "¿Interesado en asociarte con el Día Mundial del Aplauso? Completa el formulario a continuación y nuestro equipo se pondrá en contacto contigo.",
+    "backToPartners": "Volver a Socios",
+    "contactText": "¿Tienes preguntas antes de enviar? Contáctanos en"
+  },
+  "footer": {
+    "supportPolicy": "Política de Apoyo",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfUse": "Términos de Uso",
+    "legalText": "Al usar este sitio web, aceptas nuestros",
+    "and": "y",
+    "copyright": "Copyright © {year} Día Mundial del Aplauso"
+  },
+  "common": {
+    "loading": "Cargando..."
+  }
+}
