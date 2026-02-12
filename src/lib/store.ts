@@ -19,6 +19,35 @@ interface CartStore {
   getItemCount: () => number
 }
 
+// Timezone store for managing user's selected timezone
+interface TimezoneInfo {
+  timezone: string
+  city?: string
+  country?: string
+  source: 'ip' | 'city' | 'browser'
+}
+
+interface TimezoneStore {
+  timezoneInfo: TimezoneInfo | null
+  isLoading: boolean
+  setTimezone: (info: TimezoneInfo) => void
+  setLoading: (loading: boolean) => void
+}
+
+export const useTimezoneStore = create<TimezoneStore>()(
+  persist(
+    (set) => ({
+      timezoneInfo: null,
+      isLoading: true,
+      setTimezone: (info) => set({ timezoneInfo: info, isLoading: false }),
+      setLoading: (loading) => set({ isLoading: loading }),
+    }),
+    {
+      name: 'wcd-timezone',
+    }
+  )
+)
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({

@@ -39,7 +39,7 @@ export default function EmailSubscriptionForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-10 max-w-xl mx-auto">
+    <form onSubmit={handleSubmit} className="max-w-xl mx-auto">
       <div className="flex flex-col gap-4">
         {/* Email Input */}
         <input

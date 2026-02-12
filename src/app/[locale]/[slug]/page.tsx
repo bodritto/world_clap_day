@@ -4,6 +4,7 @@ import { setRequestLocale } from 'next-intl/server'
 import { PortableText } from '@portabletext/react'
 import { getPolicyPage, getAllPolicySlugs } from '@/sanity/client'
 import type { Locale } from '@/i18n/config'
+import { locales } from '@/i18n/config'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
@@ -12,9 +13,17 @@ type Props = {
 export async function generateStaticParams() {
   try {
     const slugs = await getAllPolicySlugs()
-    return slugs.map((item: { slug: string }) => ({
-      slug: item.slug,
-    }))
+    // Generate all combinations of locale and slug
+    const params = []
+    for (const locale of locales) {
+      for (const item of slugs) {
+        params.push({
+          locale,
+          slug: item.slug,
+        })
+      }
+    }
+    return params
   } catch {
     // Return empty array if Sanity is not configured
     return []

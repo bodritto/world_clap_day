@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -43,4 +44,15 @@ model SiteStats {
   id            String   @id @default("main")
   clapperCount  Int      @default(64241)
   updatedAt     DateTime @updatedAt
+}
+
+// User locations for world map visualization
+model UserLocation {
+  id          String   @id @default(cuid())
+  city        String
+  country     String
+  countryCode String   // ISO 3166-1 alpha-2 (e.g., "US", "DE")
+  createdAt   DateTime @default(now())
+
+  @@index([countryCode])
 }

@@ -11,11 +11,16 @@
   },
   "home": {
     "title": "Journée Mondiale de l'Applaudissement",
-    "subtitle": "Un moment global de connexion humaine et de célébration",
+    "subtitle": "En humanité nous applaudissons.",
     "missionTitle": "Un moment. Un monde. Un applaudissement.",
     "missionText": "La Journée Mondiale de l'Applaudissement construit une tradition mondiale qui unit l'humanité à travers une action partagée. Rejoignez des millions de personnes à travers le monde dans un moment synchronisé d'unité et de célébration.",
     "joinMovement": "Rejoindre le Mouvement",
-    "becomePartner": "Devenir Partenaire"
+    "becomePartner": "Devenir Partenaire",
+    "joinTheClap": "Rejoindre l'applaudissement",
+    "joinTheClapSubline": "Faites partie du plus grand moment humain de l'histoire",
+    "addToCalendar": "Ajouter au calendrier Google",
+    "findLocalClapTitle": "Trouvez l'heure locale de votre applaudissement",
+    "findLocalClapSubtitle": "Tapez votre ville pour voir quand applaudir."
   },
   "countdown": {
     "days": "JOURS",
@@ -24,7 +29,7 @@
     "seconds": "SECONDES"
   },
   "counter": {
-    "title": "Applaudisseurs qui ont rejoint la mission"
+    "title": "TOTAL DES APPLAUDISSEURS DANS LE MONDE"
   },
   "email": {
     "placeholder": "Entrez votre email",
@@ -52,7 +57,8 @@
     "disclaimer4": "Si vous avez effectué un paiement par erreur, contactez-nous à",
     "disclaimer5": "Les remboursements peuvent être envisagés au cas par cas à notre discrétion.",
     "wallOfClaps": "Mur des Applaudissements",
-    "wallOfClapsText": "Le Mur des Applaudissements est le registre permanent des supporters fondateurs. Chaque nom est un applaudissement. Chaque applaudissement est un signal que nous pouvons nous unir."
+    "wallOfClapsText": "Le Mur des Applaudissements est le registre permanent des supporters fondateurs. Chaque nom est un applaudissement. Chaque applaudissement est un signal que nous pouvons nous unir.",
+    "getOnTheWall": "Rejoindre le mur"
   },
   "donationCard": {
     "addToCart": "Ajouter au Panier",
@@ -134,5 +140,25 @@
   },
   "common": {
     "loading": "Chargement..."
+  },
+  "cityPicker": {
+    "title": "D'où applaudissez-vous ?",
+    "placeholder": "Recherchez votre ville...",
+    "savedAs": "Vous applaudissez depuis",
+    "success": "Localisation enregistrée !",
+    "saving": "Enregistrement..."
+  },
+  "worldMap": {
+    "title": "Applaudisseurs à Travers le Monde",
+    "participantsCount": "{count, plural, =1 {# personne} other {# personnes}} ont rejoint du monde entier",
+    "beFirst": "Soyez le premier à ajouter votre localisation !",
+    "loading": "Chargement de la carte...",
+    "participant": "applaudisseur",
+    "participants": "applaudisseurs"
+  },
+  "mainClock": {
+    "detecting": "Détection de votre fuseau horaire...",
+    "yourTime": "Votre heure locale à {location}",
+    "localTime": "Heure Locale"
   }
 }

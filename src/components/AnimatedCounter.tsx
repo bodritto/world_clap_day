@@ -61,7 +61,7 @@ export default function AnimatedCounter({
 
   return (
     <div ref={counterRef} className={`elementor-counter text-center ${className}`}>
-      <div className="elementor-counter-title text-lg md:text-xl text-muted mb-3 font-medium">
+      <div className="elementor-counter-title text-lg md:text-xl text-white mb-3 font-medium">
         {title}
       </div>
       <div className="elementor-counter-number-wrapper">

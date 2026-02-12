@@ -1,18 +1,65 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/routing'
+import MainClock from './MainClock'
 
-const cities = [
-  { name: 'London', time: '3:00 pm' },
-  { name: 'New York', time: '10:00 am' },
-  { name: 'Los Angeles', time: '7:00 am' },
-  { name: 'São Paulo', time: '11:00 am' },
-  { name: 'Dubai', time: '6:00 pm' },
-  { name: 'Beijing', time: '10:00 pm' },
-  { name: 'Mumbai', time: '7:30 pm' },
-  { name: 'Sydney', time: '12:00 am' },
+// World cities with IANA timezone identifiers for live time display
+const worldCities = [
+  { name: 'London', timezone: 'Europe/London' },
+  { name: 'New York', timezone: 'America/New_York' },
+  { name: 'Los Angeles', timezone: 'America/Los_Angeles' },
+  { name: 'São Paulo', timezone: 'America/Sao_Paulo' },
+  { name: 'Dubai', timezone: 'Asia/Dubai' },
+  { name: 'Beijing', timezone: 'Asia/Shanghai' },
+  { name: 'Mumbai', timezone: 'Asia/Kolkata' },
+  { name: 'Sydney', timezone: 'Australia/Sydney' },
 ]
+
+// Hook to get live time for a timezone
+function useLiveTime(timezone: string) {
+  const [time, setTime] = useState<string>('')
+
+  useEffect(() => {
+    const updateTime = () => {
+      try {
+        const now = new Date()
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: timezone,
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        })
+        setTime(formatter.format(now))
+      } catch {
+        setTime('--:--')
+      }
+    }
+
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+    return () => clearInterval(interval)
+  }, [timezone])
+
+  return time
+}
+
+// Component for individual city time display
+function CityTime({ name, timezone }: { name: string; timezone: string }) {
+  const time = useLiveTime(timezone)
+  
+  return (
+    <div className="flex flex-col items-center">
+      <span className="text-sm text-muted font-medium uppercase tracking-wide">
+        {name}
+      </span>
+      <span className="text-xl md:text-2xl font-bold text-foreground mt-1">
+        {time || '--:--'}
+      </span>
+    </div>
+  )
+}
 
 const clappers = [
   { name: 'Nathalie L.', location: 'France' },
@@ -87,22 +134,15 @@ export default function WorldTimes() {
 
   return (
     <div className="mt-12 text-center">
-      {/* Date */}
-      <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
-        {t('date')}
-      </h3>
+      {/* Main Clock - Date + Time with timezone subtitle */}
+      <div className="mb-10">
+        <MainClock eventDate={t('date')} />
+      </div>
 
-      {/* Cities Grid */}
+      {/* Cities Grid - Live times around the world */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto">
-        {cities.map((city) => (
-          <div key={city.name} className="flex flex-col items-center">
-            <span className="text-sm text-muted font-medium uppercase tracking-wide">
-              {city.name}
-            </span>
-            <span className="text-xl md:text-2xl font-bold text-foreground mt-1">
-              {city.time}
-            </span>
-          </div>
+        {worldCities.map((city) => (
+          <CityTime key={city.name} name={city.name} timezone={city.timezone} />
         ))}
       </div>
 

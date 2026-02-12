@@ -62,13 +62,14 @@ export default async function LocaleLayout({ children, params }: Props) {
   // Enable static rendering
   setRequestLocale(locale)
 
-  // Get messages for the locale
-  const messages = await getMessages()
+  // Get messages for the locale (plain object for RSC serialization)
+  const rawMessages = await getMessages({ locale })
+  const messages = JSON.parse(JSON.stringify(rawMessages ?? {}))
 
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           <main className="min-h-screen pt-20">{children}</main>
           <Footer />

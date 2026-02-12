@@ -11,11 +11,16 @@
   },
   "home": {
     "title": "World Clap Day",
-    "subtitle": "A global moment of human connection and celebration",
+    "subtitle": "In Humanity We Clap.",
     "missionTitle": "One moment. One world. One clap.",
     "missionText": "World Clap Day is building a worldwide tradition that brings humanity together through one shared action. Join millions around the globe in a synchronized moment of unity and celebration.",
     "joinMovement": "Join the Movement",
-    "becomePartner": "Become a Partner"
+    "becomePartner": "Become a Partner",
+    "joinTheClap": "Join the Clap",
+    "joinTheClapSubline": "Be part of the biggest human moment in history",
+    "addToCalendar": "Add to Google Calendar",
+    "findLocalClapTitle": "Find Your Local Clap Time",
+    "findLocalClapSubtitle": "Type your city to see when you should clap."
   },
   "countdown": {
     "days": "DAYS",
@@ -24,7 +29,7 @@
     "seconds": "SECONDS"
   },
   "counter": {
-    "title": "Clappers who joined the mission"
+    "title": "TOTAL CLAPPERS WORLDWIDE"
   },
   "email": {
     "placeholder": "Enter your email",
@@ -52,7 +57,8 @@
     "disclaimer4": "If you made a payment in error, contact us at",
     "disclaimer5": "Refunds may be considered on a case by case basis at our discretion.",
     "wallOfClaps": "Wall of Claps",
-    "wallOfClapsText": "The Wall of Claps is the permanent record of founding supporters. Every name is a clap. Every clap is a signal that we can unite."
+    "wallOfClapsText": "The Wall of Claps is the permanent record of founding supporters. Every name is a clap. Every clap is a signal that we can unite.",
+    "getOnTheWall": "Get on the wall"
   },
   "donationCard": {
     "addToCart": "Add to Cart",
@@ -134,5 +140,25 @@
   },
   "common": {
     "loading": "Loading..."
+  },
+  "cityPicker": {
+    "title": "Where are you clapping from?",
+    "placeholder": "Search for your city...",
+    "savedAs": "You're clapping from",
+    "success": "Location saved!",
+    "saving": "Saving..."
+  },
+  "worldMap": {
+    "title": "Clappers Around the World",
+    "participantsCount": "{count, plural, =1 {# person} other {# people}} joined from around the world",
+    "beFirst": "Be the first to add your location!",
+    "loading": "Loading map...",
+    "participant": "clapper",
+    "participants": "clappers"
+  },
+  "mainClock": {
+    "detecting": "Detecting your timezone...",
+    "yourTime": "Your local time in {location}",
+    "localTime": "Local Time"
   }
 }

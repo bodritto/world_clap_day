@@ -11,11 +11,16 @@
   },
   "home": {
     "title": "Weltapplaustag",
-    "subtitle": "Ein globaler Moment menschlicher Verbundenheit und Feier",
+    "subtitle": "In der Menschheit klatschen wir.",
     "missionTitle": "Ein Moment. Eine Welt. Ein Applaus.",
     "missionText": "Der Weltapplaustag baut eine weltweite Tradition auf, die die Menschheit durch eine gemeinsame Aktion vereint. Schließen Sie sich Millionen auf der ganzen Welt in einem synchronisierten Moment der Einheit und Feier an.",
     "joinMovement": "Der Bewegung Beitreten",
-    "becomePartner": "Partner Werden"
+    "becomePartner": "Partner Werden",
+    "joinTheClap": "Beim Applaus dabei sein",
+    "joinTheClapSubline": "Sei Teil des größten menschlichen Moments der Geschichte",
+    "addToCalendar": "In Google Kalender eintragen",
+    "findLocalClapTitle": "Finde deine lokale Klatschzeit",
+    "findLocalClapSubtitle": "Gib deine Stadt ein, um zu sehen, wann du klatschen sollst."
   },
   "countdown": {
     "days": "TAGE",
@@ -24,7 +29,7 @@
     "seconds": "SEKUNDEN"
   },
   "counter": {
-    "title": "Klatscher, die sich der Mission angeschlossen haben"
+    "title": "WELTWEITE KLATSCHER GESAMT"
   },
   "email": {
     "placeholder": "E-Mail eingeben",
@@ -52,7 +57,8 @@
     "disclaimer4": "Wenn Sie versehentlich bezahlt haben, kontaktieren Sie uns unter",
     "disclaimer5": "Rückerstattungen können im Einzelfall nach unserem Ermessen in Betracht gezogen werden.",
     "wallOfClaps": "Wand des Applauses",
-    "wallOfClapsText": "Die Wand des Applauses ist das permanente Register der Gründungsunterstützer. Jeder Name ist ein Applaus. Jeder Applaus ist ein Zeichen, dass wir uns vereinen können."
+    "wallOfClapsText": "Die Wand des Applauses ist das permanente Register der Gründungsunterstützer. Jeder Name ist ein Applaus. Jeder Applaus ist ein Zeichen, dass wir uns vereinen können.",
+    "getOnTheWall": "An die Wand kommen"
   },
   "donationCard": {
     "addToCart": "In den Warenkorb",
@@ -134,5 +140,25 @@
   },
   "common": {
     "loading": "Wird geladen..."
+  },
+  "cityPicker": {
+    "title": "Von wo aus klatschst du?",
+    "placeholder": "Suche nach deiner Stadt...",
+    "savedAs": "Du klatschst aus",
+    "success": "Standort gespeichert!",
+    "saving": "Wird gespeichert..."
+  },
+  "worldMap": {
+    "title": "Klatscher auf der ganzen Welt",
+    "participantsCount": "{count, plural, =1 {# Person} other {# Personen}} aus aller Welt dabei",
+    "beFirst": "Sei der Erste, der seinen Standort hinzufügt!",
+    "loading": "Karte wird geladen...",
+    "participant": "Klatscher",
+    "participants": "Klatscher"
+  },
+  "mainClock": {
+    "detecting": "Deine Zeitzone wird erkannt...",
+    "yourTime": "Deine Ortszeit in {location}",
+    "localTime": "Ortszeit"
   }
 }

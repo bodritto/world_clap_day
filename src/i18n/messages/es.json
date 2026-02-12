@@ -11,11 +11,16 @@
   },
   "home": {
     "title": "Día Mundial del Aplauso",
-    "subtitle": "Un momento global de conexión humana y celebración",
+    "subtitle": "En la humanidad aplaudimos.",
     "missionTitle": "Un momento. Un mundo. Un aplauso.",
     "missionText": "El Día Mundial del Aplauso está construyendo una tradición mundial que une a la humanidad a través de una acción compartida. Únete a millones en todo el mundo en un momento sincronizado de unidad y celebración.",
     "joinMovement": "Únete al Movimiento",
-    "becomePartner": "Conviértete en Socio"
+    "becomePartner": "Conviértete en Socio",
+    "joinTheClap": "Únete al aplauso",
+    "joinTheClapSubline": "Sé parte del mayor momento humano de la historia",
+    "addToCalendar": "Añadir al calendario de Google",
+    "findLocalClapTitle": "Encuentra tu hora local del aplauso",
+    "findLocalClapSubtitle": "Escribe tu ciudad para ver cuándo debes aplaudir."
   },
   "countdown": {
     "days": "DÍAS",
@@ -24,7 +29,7 @@
     "seconds": "SEGUNDOS"
   },
   "counter": {
-    "title": "Aplaudidores que se unieron a la misión"
+    "title": "TOTAL DE APLAUDIDORES EN EL MUNDO"
   },
   "email": {
     "placeholder": "Ingresa tu correo electrónico",
@@ -52,7 +57,8 @@
     "disclaimer4": "Si realizaste un pago por error, contáctanos en",
     "disclaimer5": "Los reembolsos pueden ser considerados caso por caso a nuestra discreción.",
     "wallOfClaps": "Muro de Aplausos",
-    "wallOfClapsText": "El Muro de Aplausos es el registro permanente de los fundadores. Cada nombre es un aplauso. Cada aplauso es una señal de que podemos unirnos."
+    "wallOfClapsText": "El Muro de Aplausos es el registro permanente de los fundadores. Cada nombre es un aplauso. Cada aplauso es una señal de que podemos unirnos.",
+    "getOnTheWall": "Subir al muro"
   },
   "donationCard": {
     "addToCart": "Añadir al Carrito",
@@ -134,5 +140,25 @@
   },
   "common": {
     "loading": "Cargando..."
+  },
+  "cityPicker": {
+    "title": "¿Desde dónde aplauides?",
+    "placeholder": "Busca tu ciudad...",
+    "savedAs": "Estás aplaudiendo desde",
+    "success": "¡Ubicación guardada!",
+    "saving": "Guardando..."
+  },
+  "worldMap": {
+    "title": "Aplaudidores en Todo el Mundo",
+    "participantsCount": "{count, plural, =1 {# persona} other {# personas}} se unieron de todo el mundo",
+    "beFirst": "¡Sé el primero en agregar tu ubicación!",
+    "loading": "Cargando mapa...",
+    "participant": "aplaudidor",
+    "participants": "aplaudidores"
+  },
+  "mainClock": {
+    "detecting": "Detectando tu zona horaria...",
+    "yourTime": "Tu hora local en {location}",
+    "localTime": "Hora Local"
   }
 }

@@ -2,6 +2,11 @@ import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 
+// Allow self-signed certificates for DigitalOcean managed databases
+if (process.env.DATABASE_URL?.includes('digitalocean.com')) {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+}
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
@@ -15,7 +20,10 @@ function createPrismaClient() {
     return null
   }
 
-  const pool = new Pool({ connectionString })
+  const pool = new Pool({ 
+    connectionString,
+    ssl: { rejectUnauthorized: false }
+  })
   const adapter = new PrismaPg(pool)
   
   return new PrismaClient({
@@ -144,4 +152,50 @@ export async function getRecentSupporters(limit: number = 50) {
     orderBy: { createdAt: 'desc' },
     take: limit,
   })
+}
+
+// Helper functions for user locations (world map)
+export async function addUserLocation(data: {
+  city: string
+  country: string
+  countryCode: string
+}) {
+  if (!prisma) {
+    console.warn('Database not configured, skipping addUserLocation')
+    return null
+  }
+
+  return prisma.userLocation.create({
+    data: {
+      city: data.city,
+      country: data.country,
+      countryCode: data.countryCode,
+    },
+  })
+}
+
+export async function getLocationCountsByCountry(): Promise<Record<string, number>> {
+  if (!prisma) {
+    return {}
+  }
+
+  const counts = await prisma.userLocation.groupBy({
+    by: ['countryCode'],
+    _count: {
+      countryCode: true,
+    },
+  })
+
+  return counts.reduce((acc: Record<string, number>, item: { countryCode: string; _count: { countryCode: number } }) => {
+    acc[item.countryCode] = item._count.countryCode
+    return acc
+  }, {})
+}
+
+export async function getTotalLocationCount(): Promise<number> {
+  if (!prisma) {
+    return 0
+  }
+
+  return prisma.userLocation.count()
 }
