@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
+import AddToCalendar from '@/components/AddToCalendar'
 import CountdownTimer from '@/components/CountdownTimer'
 import AnimatedCounter from '@/components/AnimatedCounter'
 import EmailSubscriptionForm from '@/components/EmailSubscriptionForm'
@@ -24,13 +25,22 @@ const defaultSettings = {
   },
 }
 
-const defaultSupporters = [
-  { _id: '1', name: 'Anna K.', country: 'Germany', _createdAt: '2024-01-15' },
-  { _id: '2', name: 'David M.', country: 'USA', _createdAt: '2024-01-14' },
-  { _id: '3', name: 'Maria S.', country: 'Spain', _createdAt: '2024-01-13' },
-  { _id: '4', name: 'John L.', country: 'UK', _createdAt: '2024-01-12' },
-  { _id: '5', name: 'Yuki T.', country: 'Japan', _createdAt: '2024-01-11' },
-  { _id: '6', name: 'Sophie L.', country: 'France', _createdAt: '2024-01-10' },
+const GRID_CLAPPERS_SIZE = 12 // 3×4 grid
+
+// Mock supporters to fill the grid when DB has fewer (or for demo)
+const mockSupporters = [
+  { _id: 'mock-1', name: 'Anna K.', country: 'Germany', countryCode: 'DE', _createdAt: '2024-01-15' },
+  { _id: 'mock-2', name: 'David M.', country: 'United States', countryCode: 'US', _createdAt: '2024-01-14' },
+  { _id: 'mock-3', name: 'Maria S.', country: 'Spain', countryCode: 'ES', _createdAt: '2024-01-13' },
+  { _id: 'mock-4', name: 'John L.', country: 'United Kingdom', countryCode: 'GB', _createdAt: '2024-01-12' },
+  { _id: 'mock-5', name: 'Yuki T.', country: 'Japan', countryCode: 'JP', _createdAt: '2024-01-11' },
+  { _id: 'mock-6', name: 'Sophie L.', country: 'France', countryCode: 'FR', _createdAt: '2024-01-10' },
+  { _id: 'mock-7', name: 'Luca B.', country: 'Italy', countryCode: 'IT', _createdAt: '2024-01-09' },
+  { _id: 'mock-8', name: 'Emma W.', country: 'Canada', countryCode: 'CA', _createdAt: '2024-01-08' },
+  { _id: 'mock-9', name: 'James O.', country: 'Australia', countryCode: 'AU', _createdAt: '2024-01-07' },
+  { _id: 'mock-10', name: 'Olga P.', country: 'Poland', countryCode: 'PL', _createdAt: '2024-01-06' },
+  { _id: 'mock-11', name: 'Carlos R.', country: 'Brazil', countryCode: 'BR', _createdAt: '2024-01-05' },
+  { _id: 'mock-12', name: 'Priya N.', country: 'India', countryCode: 'IN', _createdAt: '2024-01-04' },
 ]
 
 type Props = {
@@ -42,7 +52,7 @@ export default async function HomePage({ params }: Props) {
   setRequestLocale(locale)
 
   let settings = defaultSettings
-  let supporters = defaultSupporters
+  let supporters: typeof mockSupporters = mockSupporters
 
   try {
     const [sanitySettings, sanitySupporters] = await Promise.all([
@@ -53,7 +63,13 @@ export default async function HomePage({ params }: Props) {
       settings = { ...defaultSettings, ...sanitySettings }
     }
     if (sanitySupporters && sanitySupporters.length > 0) {
-      supporters = sanitySupporters
+      supporters = sanitySupporters as typeof mockSupporters
+    }
+    // Pad with mock up to 12 so the 3×4 grid is always full (for now)
+    if (supporters.length < GRID_CLAPPERS_SIZE) {
+      const need = GRID_CLAPPERS_SIZE - supporters.length
+      const pad = mockSupporters.slice(0, need).map((m, i) => ({ ...m, _id: `mock-pad-${i}` }))
+      supporters = [...supporters, ...pad]
     }
   } catch {
     console.log('Using default settings')
@@ -71,7 +87,7 @@ function HomePageContent({
   supporters,
 }: {
   settings: typeof defaultSettings
-  supporters: typeof defaultSupporters
+  supporters: typeof mockSupporters
 }) {
   const t = useTranslations('home')
   const tCounter = useTranslations('counter')
@@ -119,6 +135,20 @@ function HomePageContent({
                 {t('joinTheClapSubline')}
               </p>
               <EmailSubscriptionForm />
+              <div className="relative flex items-center gap-4 mt-6">
+                <span className="flex-1 h-px bg-white/40" aria-hidden />
+                <span className="text-sm text-white/90 font-medium">{t('or')}</span>
+                <span className="flex-1 h-px bg-white/40" aria-hidden />
+              </div>
+              <div className="mt-6">
+                <AddToCalendar variant="dark" />
+              </div>
+            </div>
+          </div>
+          {/* Scroll indicator on black background, smaller */}
+          <div className="flex justify-center pt-6 pb-4">
+            <div className="w-8 h-12 rounded-full border-2 border-white/50 flex items-start justify-center pt-1.5">
+              <div className="w-1 h-3 bg-white/70 rounded-full animate-bounce" />
             </div>
           </div>
         </div>

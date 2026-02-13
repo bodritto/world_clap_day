@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-import { Search, MapPin, Check } from 'lucide-react'
+import { Search, MapPin } from 'lucide-react'
 import { searchCities, City } from '@/lib/cities'
 import { useTimezoneStore } from '@/lib/store'
 
@@ -127,24 +127,6 @@ export default function CityPicker({ onLocationSaved }: CityPickerProps) {
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  // If user already saved their location, show confirmation
-  if (savedLocation) {
-    return (
-      <div className="max-w-xl mx-auto">
-        <div className="flex items-center justify-center gap-3 py-4 px-6 bg-primary/10 rounded-lg border border-primary/20">
-          <MapPin className="w-5 h-5 text-primary" />
-          <span className="text-foreground">
-            {t('savedAs')}{' '}
-            <span className="font-semibold">
-              {savedLocation.city}, {savedLocation.country}
-            </span>
-          </span>
-          <Check className="w-5 h-5 text-green-600" />
-        </div>
-      </div>
-    )
   }
 
   return (

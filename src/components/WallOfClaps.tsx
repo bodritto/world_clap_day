@@ -4,6 +4,7 @@ interface Supporter {
   _id: string
   name: string
   country?: string
+  countryCode?: string
   tier?: { name: string }
   _createdAt: string
 }
@@ -11,6 +12,65 @@ interface Supporter {
 interface WallOfClapsProps {
   supporters: Supporter[]
 }
+
+/** Convert ISO 3166-1 alpha-2 code to flag emoji (e.g. "US" -> 🇺🇸) */
+function getFlagEmoji(countryCode: string): string {
+  const code = (countryCode || '').toUpperCase().slice(0, 2)
+  if (code.length !== 2) return ''
+  return [...code]
+    .map((c) => String.fromCodePoint(0x1f1e6 - 65 + c.charCodeAt(0)))
+    .join('')
+}
+
+/** Country name -> alpha-2 for common names (fallback when only country is set) */
+const countryNameToCode: Record<string, string> = {
+  'United States': 'US',
+  'United States of America': 'US',
+  'United Kingdom': 'GB',
+  'Germany': 'DE',
+  'France': 'FR',
+  'Spain': 'ES',
+  'Italy': 'IT',
+  'Canada': 'CA',
+  'Australia': 'AU',
+  'Japan': 'JP',
+  'Brazil': 'BR',
+  'Mexico': 'MX',
+  'India': 'IN',
+  'Netherlands': 'NL',
+  'Switzerland': 'CH',
+  'Austria': 'AT',
+  'Belgium': 'BE',
+  'Poland': 'PL',
+  'Sweden': 'SE',
+  'Norway': 'NO',
+  'Denmark': 'DK',
+  'Finland': 'FI',
+  'Ireland': 'IE',
+  'Portugal': 'PT',
+  'Argentina': 'AR',
+  'Chile': 'CL',
+  'Colombia': 'CO',
+  'South Africa': 'ZA',
+  'New Zealand': 'NZ',
+  'Russia': 'RU',
+  'China': 'CN',
+  'South Korea': 'KR',
+  'Turkey': 'TR',
+}
+
+function getFlagForSupporter(supporter: Supporter): string {
+  if (supporter.countryCode) return getFlagEmoji(supporter.countryCode)
+  if (supporter.country) {
+    const code = countryNameToCode[supporter.country] || countryNameToCode[supporter.country.trim()]
+    if (code) return getFlagEmoji(code)
+  }
+  return ''
+}
+
+const ROWS = 3
+const COLS = 4
+const GRID_SIZE = ROWS * COLS
 
 const ClapIcon = () => (
   <svg
@@ -32,19 +92,29 @@ export default function WallOfClaps({ supporters }: WallOfClapsProps) {
     )
   }
 
+  const displaySupporters = supporters.slice(0, GRID_SIZE)
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-      {supporters.map((supporter) => (
-        <div key={supporter._id} className="flex flex-col items-center text-center">
-          <ClapIcon />
-          <p className="mt-2 text-foreground font-bold text-sm">
-            {supporter.name}
-          </p>
-          <p className="text-muted text-sm">
-            {supporter.country || supporter.tier?.name || ''}
-          </p>
-        </div>
-      ))}
+    <div
+      className="grid gap-6 max-w-3xl mx-auto"
+      style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}
+    >
+      {displaySupporters.map((supporter) => {
+        const flag = getFlagForSupporter(supporter)
+        return (
+          <div key={supporter._id} className="flex flex-col items-center text-center">
+            <ClapIcon />
+            <p className="mt-2 text-foreground font-bold text-sm">
+              {supporter.name}
+            </p>
+            {flag ? (
+              <span className="text-2xl leading-none mt-1" title={supporter.country || supporter.countryCode} aria-hidden>
+                {flag}
+              </span>
+            ) : null}
+          </div>
+        )
+      })}
     </div>
   )
 }

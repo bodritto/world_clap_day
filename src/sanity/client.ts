@@ -105,6 +105,8 @@ export async function getSupporters() {
     return client.fetch(`*[_type == "supporter"] | order(_createdAt desc)[0...100]{
       _id,
       name,
+      country,
+      countryCode,
       tier->{name},
       _createdAt
     }`)

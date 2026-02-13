@@ -18,6 +18,7 @@
     "becomePartner": "Become a Partner",
     "joinTheClap": "Join the Clap",
     "joinTheClapSubline": "Be part of the biggest human moment in history",
+    "or": "or",
     "addToCalendar": "Add to Google Calendar",
     "findLocalClapTitle": "Find Your Local Clap Time",
     "findLocalClapSubtitle": "Type your city to see when you should clap."
@@ -154,7 +155,10 @@
     "beFirst": "Be the first to add your location!",
     "loading": "Loading map...",
     "participant": "clapper",
-    "participants": "clappers"
+    "participants": "clappers",
+    "selectOnMap": "Select a time zone in the list or click an area on the map.",
+    "searchCityPlaceholder": "Search city...",
+    "hoursFromUtc": "{offset} hours from UTC"
   },
   "mainClock": {
     "detecting": "Detecting your timezone...",

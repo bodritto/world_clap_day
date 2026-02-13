@@ -18,6 +18,7 @@
     "becomePartner": "Partner Werden",
     "joinTheClap": "Beim Applaus dabei sein",
     "joinTheClapSubline": "Sei Teil des größten menschlichen Moments der Geschichte",
+    "or": "oder",
     "addToCalendar": "In Google Kalender eintragen",
     "findLocalClapTitle": "Finde deine lokale Klatschzeit",
     "findLocalClapSubtitle": "Gib deine Stadt ein, um zu sehen, wann du klatschen sollst."
@@ -154,7 +155,10 @@
     "beFirst": "Sei der Erste, der seinen Standort hinzufügt!",
     "loading": "Karte wird geladen...",
     "participant": "Klatscher",
-    "participants": "Klatscher"
+    "participants": "Klatscher",
+    "selectOnMap": "Wähle eine Zeitzone in der Liste oder klicke auf die Karte.",
+    "searchCityPlaceholder": "Stadt suchen...",
+    "hoursFromUtc": "{offset} Stunden von UTC"
   },
   "mainClock": {
     "detecting": "Deine Zeitzone wird erkannt...",

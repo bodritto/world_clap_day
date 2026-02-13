@@ -1,13 +1,8 @@
 'use client'
 
 /**
- * Current implementation: world map (react-simple-maps) with country counts heatmap.
- *
- * Alternative — timezone map with selection + highlight:
- * - react-timezone-map-select (npm): modal with world map + list; select TZ by list or by clicking map;
- *   highlights selected timezone; MUI 5, D3/TopoJSON; demos: https://kmiyashita.gitlab.io/react-timezone-map-select/
- * - timezone-picker (npm): jQuery SVG world map, region highlight, older (~6y).
- * - react-timezone-select: no map, list-only TZ selector (DST-aware).
+ * World map (react-simple-maps) with country counts heatmap.
+ * Inline timezone selection uses TimezoneMapInline (custom SVG + vertical UTC stripes).
  */
 
 import { useState, useEffect, memo } from 'react'

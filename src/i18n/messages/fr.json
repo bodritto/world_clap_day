@@ -18,6 +18,7 @@
     "becomePartner": "Devenir Partenaire",
     "joinTheClap": "Rejoindre l'applaudissement",
     "joinTheClapSubline": "Faites partie du plus grand moment humain de l'histoire",
+    "or": "ou",
     "addToCalendar": "Ajouter au calendrier Google",
     "findLocalClapTitle": "Trouvez l'heure locale de votre applaudissement",
     "findLocalClapSubtitle": "Tapez votre ville pour voir quand applaudir."
@@ -154,7 +155,10 @@
     "beFirst": "Soyez le premier à ajouter votre localisation !",
     "loading": "Chargement de la carte...",
     "participant": "applaudisseur",
-    "participants": "applaudisseurs"
+    "participants": "applaudisseurs",
+    "selectOnMap": "Choisissez un fuseau horaire dans la liste ou cliquez sur la carte.",
+    "searchCityPlaceholder": "Rechercher une ville...",
+    "hoursFromUtc": "{offset} heures par rapport à UTC"
   },
   "mainClock": {
     "detecting": "Détection de votre fuseau horaire...",
