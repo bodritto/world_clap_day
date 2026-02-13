@@ -3,10 +3,43 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Search } from 'lucide-react'
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+} from 'react-simple-maps'
 import { useTimezoneStore } from '@/lib/store'
 import { searchCities, type City } from '@/lib/cities'
+import { alpha2ToNumeric } from '@/lib/countryNumericIds'
 
 const STORAGE_KEY = 'wcd_user_location'
+const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
+
+/** Country counts keyed by numeric id (for world-atlas). */
+function supportersToCountryCounts(
+  supporters: { countryCode?: string }[]
+): Record<string, number> {
+  const byAlpha2: Record<string, number> = {}
+  for (const s of supporters) {
+    const code = (s.countryCode || '').toUpperCase().slice(0, 2)
+    if (code) byAlpha2[code] = (byAlpha2[code] || 0) + 1
+  }
+  const byNumeric: Record<string, number> = {}
+  for (const [code, count] of Object.entries(byAlpha2)) {
+    const num = alpha2ToNumeric[code]
+    if (num) byNumeric[num] = count
+  }
+  return byNumeric
+}
+
+function getCountryFill(count: number | undefined, maxCount: number): string {
+  if (!count || count === 0) return '#e5e7eb'
+  const n = Math.log(count + 1) / Math.log(maxCount + 1)
+  const r = Math.round(252 + (193 - 252) * n)
+  const g = Math.round(231 + (127 - 231) * n)
+  const b = Math.round(243 + (181 - 243) * n)
+  return `rgb(${r}, ${g}, ${b})`
+}
 
 // UTC offset in hours: -12 .. +12 → 25 stripes
 const OFFSET_MIN = -12
@@ -59,7 +92,12 @@ function formatHoursFromUtcOffset(offsetHours: number): string {
   return `${sign}${offsetHours}`
 }
 
-export default function TimezoneMapInline() {
+interface TimezoneMapInlineProps {
+  /** Optional: supporters with countryCode to color countries on the map */
+  supporters?: { countryCode?: string }[]
+}
+
+export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInlineProps) {
   const t = useTranslations('worldMap')
   const timezoneInfo = useTimezoneStore((s) => s.timezoneInfo)
   const setTimezone = useTimezoneStore((s) => s.setTimezone)
@@ -70,6 +108,15 @@ export default function TimezoneMapInline() {
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false)
   const cityDropdownRef = useRef<HTMLDivElement>(null)
   const cityInputRef = useRef<HTMLInputElement>(null)
+
+  const countryCounts = useMemo(
+    () => supportersToCountryCounts(supporters),
+    [supporters]
+  )
+  const maxCount = useMemo(
+    () => Math.max(...Object.values(countryCounts), 1),
+    [countryCounts]
+  )
 
   const offsetFromStore = useMemo(() => {
     if (!timezoneInfo?.timezone) return 0
@@ -253,9 +300,8 @@ export default function TimezoneMapInline() {
         />
       </div>
 
-      {/* Desktop: stripe labels above map, then map + interactive stripes */}
+      {/* Desktop: stripe labels above map, then map (countries colored) + interactive stripes overlay */}
       <div className="hidden sm:block w-full">
-        {/* Labels row: UTC over 0, -1 -2 -3... left, +1 +2 +3... right */}
         <div className="flex w-full mb-1">
           {offsets.map((offset) => (
             <div
@@ -266,12 +312,31 @@ export default function TimezoneMapInline() {
             </div>
           ))}
         </div>
-        <div className="relative w-full overflow-hidden rounded-lg bg-gray-100" style={{ aspectRatio: '2000/1280' }}>
-          <img
-            src="/world-map.svg"
-            alt="World map"
-            className="absolute inset-0 w-full h-full object-contain"
-          />
+        <div className="relative w-full overflow-hidden rounded-lg bg-gray-100" style={{ aspectRatio: '2/1', minHeight: '280px' }}>
+          <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{ scale: 120, center: [0, 30] }}
+            style={{ width: '100%', height: '100%' }}
+          >
+            <Geographies geography={GEO_URL}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const id = String(geo.id)
+                  const count = countryCounts[id] || 0
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill={getCountryFill(count, maxCount)}
+                      stroke="#9ca3af"
+                      strokeWidth={0.5}
+                      style={{ default: { outline: 'none' }, hover: { outline: 'none' }, pressed: { outline: 'none' } }}
+                    />
+                  )
+                })
+              }
+            </Geographies>
+          </ComposableMap>
           <div className="absolute inset-0 flex pointer-events-none">
             <div className="absolute inset-0 flex pointer-events-auto">
               {offsets.map((offset, i) => {

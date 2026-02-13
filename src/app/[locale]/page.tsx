@@ -154,8 +154,8 @@ function HomePageContent({
         </div>
       </section>
 
-      {/* Section 2 (90dvh). Calendar + find local clap time + map in same block. */}
-      <SecondSectionAndMap />
+      {/* Section 2 (90dvh). Timezone map with country coloring from supporters. */}
+      <SecondSectionAndMap supporters={supporters} />
 
       {/* Section 3: Wall of Claps — third "page" ends here */}
       <section className="py-16 px-4 bg-white">
