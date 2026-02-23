@@ -65,9 +65,9 @@ function getOffsetHoursFromTimezone(tz: string): number {
   }
 }
 
-/** IANA timezone for a whole-hour UTC offset (Etc/GMT±N, sign inverted per spec). */
+/** IANA timezone for a whole-hour UTC offset. Etc/GMT uses opposite sign: GMT-5 = UTC+5, GMT+5 = UTC-5. */
 function offsetToIana(offsetHours: number): string {
-  const sign = offsetHours <= 0 ? '-' : '+'
+  const sign = offsetHours <= 0 ? '+' : '-'  // invert: UTC-5 → Etc/GMT+5, UTC+5 → Etc/GMT-5
   const abs = Math.abs(offsetHours)
   return `Etc/GMT${sign}${abs}`
 }
@@ -220,99 +220,144 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
   )
 
   return (
-    <div className="w-full space-y-3">
-      <p className="text-muted text-center text-sm">
+    <div className="w-full min-w-0 space-y-3">
+      <p className="text-muted text-center text-sm sm:text-left">
         {t('selectOnMap')}
       </p>
 
-      {/* City search — select city to highlight its timezone on the map */}
-      <div className="relative max-w-md mx-auto" ref={cityDropdownRef}>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" />
-          <input
-            ref={cityInputRef}
-            type="text"
-            value={cityQuery}
-            onChange={(e) => setCityQuery(e.target.value)}
-            onFocus={() => cityResults.length > 0 && setCityDropdownOpen(true)}
-            placeholder={t('searchCityPlaceholder')}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 bg-white text-foreground placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-            aria-autocomplete="list"
-            aria-expanded={cityDropdownOpen}
-          />
-        </div>
-        {cityDropdownOpen && cityResults.length > 0 && (
-          <ul
-            className="absolute z-10 top-full left-0 right-0 mt-1 py-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto"
-            role="listbox"
+      {/* Wrapper so one ref covers both mobile and desktop city search for click-outside */}
+      <div ref={cityDropdownRef} className="contents">
+      {/* Mobile: city input + UTC select in one row, left-aligned */}
+      <div className="sm:hidden flex flex-col gap-3">
+        <div className="flex gap-2 items-stretch">
+          <div className="relative flex-1 min-w-0">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted pointer-events-none" />
+            <input
+              ref={cityInputRef}
+              type="text"
+              value={cityQuery}
+              onChange={(e) => setCityQuery(e.target.value)}
+              onFocus={() => cityResults.length > 0 && setCityDropdownOpen(true)}
+              placeholder={t('searchCityPlaceholder')}
+              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-gray-300 bg-white text-foreground placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+              aria-autocomplete="list"
+              aria-expanded={cityDropdownOpen}
+            />
+            {cityDropdownOpen && cityResults.length > 0 && (
+              <ul
+                className="absolute z-10 top-full left-0 right-0 mt-1 py-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto"
+                role="listbox"
+              >
+                {cityResults.map((city) => (
+                  <li key={`${city.city}-${city.country}`} role="option">
+                    <button
+                      type="button"
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none text-foreground"
+                      onClick={() => handleCitySelect(city)}
+                    >
+                      {city.city}, {city.country}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <label htmlFor="tz-offset-mobile" className="sr-only">
+            {t('selectOnMap')}
+          </label>
+          <select
+            id="tz-offset-mobile"
+            value={selectedOffset}
+            onChange={(e) => handleSelect(Number(e.target.value))}
+            className="shrink-0 w-auto min-w-[5rem] py-2.5 px-3 text-sm rounded-lg border border-gray-300 bg-white text-foreground cursor-pointer touch-manipulation"
           >
-            {cityResults.map((city) => (
-              <li key={`${city.city}-${city.country}`} role="option">
-                <button
-                  type="button"
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none text-foreground"
-                  onClick={() => handleCitySelect(city)}
-                >
-                  {city.city}, {city.country}
-                </button>
-              </li>
+            {offsets.map((offset) => (
+              <option key={offset} value={offset}>
+                {formatUtcLabel(offset)}
+              </option>
             ))}
-          </ul>
-        )}
-      </div>
-
-      {/* UTC label + hours from UTC on the same line */}
-      <div className="text-center flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-        <span className="text-lg font-semibold text-foreground tabular-nums">
+          </select>
+        </div>
+        {/* Mobile: итоговый часовой пояс — только UTC±N, крупно, по центру, с отступами */}
+        <p className="text-2xl font-bold text-foreground tabular-nums text-center my-5">
           {formatUtcLabel(selectedOffset)}
-        </span>
-        <span className="text-muted text-sm">
-          {t('hoursFromUtc', { offset: formatHoursFromUtcOffset(selectedOffset) })}
-        </span>
+        </p>
       </div>
 
-      {/* Mobile: native select — comfortable tap target, no tiny stripes */}
-      <div className="sm:hidden w-full max-w-xs mx-auto">
-        <label htmlFor="tz-offset-mobile" className="sr-only">
-          {t('selectOnMap')}
-        </label>
-        <select
-          id="tz-offset-mobile"
-          value={selectedOffset}
-          onChange={(e) => handleSelect(Number(e.target.value))}
-          className="w-full py-3 px-4 text-base rounded-lg border border-gray-300 bg-white text-foreground cursor-pointer touch-manipulation"
-        >
-          {offsets.map((offset) => (
-            <option key={offset} value={offset}>
-              {formatUtcLabel(offset)}
-            </option>
-          ))}
-        </select>
+      {/* Desktop: город 80% + UTC селект 20% в одной строке, затем итоговый пояс по центру */}
+      <div className="hidden sm:block space-y-3">
+        <div className="grid grid-cols-[4fr_1fr] gap-2 w-full">
+          <div className="relative min-w-0">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" />
+            <input
+              ref={cityInputRef}
+              type="text"
+              value={cityQuery}
+              onChange={(e) => setCityQuery(e.target.value)}
+              onFocus={() => cityResults.length > 0 && setCityDropdownOpen(true)}
+              placeholder={t('searchCityPlaceholder')}
+              className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 bg-white text-foreground placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+              aria-autocomplete="list"
+              aria-expanded={cityDropdownOpen}
+            />
+            {cityDropdownOpen && cityResults.length > 0 && (
+              <ul
+                className="absolute z-10 top-full left-0 right-0 mt-1 py-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto"
+                role="listbox"
+              >
+                {cityResults.map((city) => (
+                  <li key={`${city.city}-${city.country}`} role="option">
+                    <button
+                      type="button"
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none text-foreground"
+                      onClick={() => handleCitySelect(city)}
+                    >
+                      {city.city}, {city.country}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <label htmlFor="tz-offset-desktop" className="sr-only">
+            {t('selectOnMap')}
+          </label>
+          <select
+            id="tz-offset-desktop"
+            value={selectedOffset}
+            onChange={(e) => handleSelect(Number(e.target.value))}
+            className="w-full min-w-0 py-2.5 px-3 rounded-lg border border-gray-300 bg-white text-foreground cursor-pointer text-sm"
+          >
+            {offsets.map((offset) => (
+              <option key={offset} value={offset}>
+                {formatUtcLabel(offset)}
+              </option>
+            ))}
+          </select>
+        </div>
+        {/* Desktop: итоговый часовой пояс — только UTC±N, по центру над картой, крупно как заголовок, с отступами */}
+        <div className="flex justify-center text-center my-6">
+          <span className="text-2xl sm:text-3xl font-bold text-foreground tabular-nums">
+            {formatUtcLabel(selectedOffset)}
+          </span>
+        </div>
+      </div>
       </div>
 
-      {/* Mobile: map as decoration only (no stripes) */}
-      <div className="sm:hidden relative w-full overflow-hidden rounded-lg bg-gray-100" style={{ aspectRatio: '2000/1280' }}>
-        <img
-          src="/world-map.svg"
-          alt=""
-          className="absolute inset-0 w-full h-full object-contain"
-          aria-hidden
-        />
-      </div>
-
-      {/* Desktop: stripe labels above map, then map (countries colored) + interactive stripes overlay */}
-      <div className="hidden sm:block w-full">
-        <div className="flex w-full mb-1">
+      {/* Map (same on mobile and desktop): countries colored; stripe labels + overlay for selection */}
+      <div className="w-full min-w-0">
+        {/* Stripe labels: above stripes (smaller on mobile) */}
+        <div className="flex w-full mb-1 min-w-0">
           {offsets.map((offset) => (
             <div
               key={offset}
-              className="flex-1 shrink-0 text-center text-xs font-medium text-muted tabular-nums"
+              className="flex-1 min-w-0 text-center text-[10px] sm:text-xs font-medium text-muted tabular-nums truncate"
             >
               {formatStripeLabel(offset)}
             </div>
           ))}
         </div>
-        <div className="relative w-full overflow-hidden rounded-lg bg-gray-100" style={{ aspectRatio: '2/1', minHeight: '280px' }}>
+        <div className="relative w-full min-w-0 overflow-hidden rounded-lg bg-gray-100" style={{ aspectRatio: '2/1', minHeight: '240px' }}>
           <ComposableMap
             projection="geoMercator"
             projectionConfig={{ scale: 120, center: [0, 30] }}
@@ -337,8 +382,9 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
               }
             </Geographies>
           </ComposableMap>
-          <div className="absolute inset-0 flex pointer-events-none">
-            <div className="absolute inset-0 flex pointer-events-auto">
+          {/* Stripe overlay: tap/click to select timezone (mobile + desktop) */}
+          <div className="flex absolute inset-0 pointer-events-none">
+            <div className="absolute inset-0 flex pointer-events-auto min-w-0">
               {offsets.map((offset, i) => {
                 const isSelected = selectedOffset === offset
                 const isHover = hoverOffset === offset
@@ -350,7 +396,7 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
                   <button
                     key={offset}
                     type="button"
-                    className="flex-1 shrink-0 transition-colors cursor-pointer border-0 border-r border-gray-300/50 last:border-r-0"
+                    className="flex-1 min-w-0 transition-colors cursor-pointer border-0 border-r border-gray-300/50 last:border-r-0 touch-manipulation"
                     style={{ backgroundColor: bg }}
                     onMouseEnter={() => setHoverOffset(offset)}
                     onMouseLeave={() => setHoverOffset(null)}

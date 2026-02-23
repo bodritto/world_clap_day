@@ -11,10 +11,9 @@ interface SecondSectionAndMapProps {
 export default function SecondSectionAndMap({ supporters = [] }: SecondSectionAndMapProps) {
   return (
     <section
-      className="min-h-[90dvh] flex flex-col px-4 py-12 lg:py-16 bg-white"
-      style={{ minHeight: '90dvh' }}
+      className="flex flex-col px-4 pt-12 pb-4 sm:min-h-[90dvh] sm:pt-16 sm:pb-6 lg:pb-8 bg-white"
     >
-      <div className="max-w-5xl mx-auto w-full pb-8 min-h-[min(50vh,400px)]">
+      <div className="max-w-5xl mx-auto w-full min-w-0 sm:min-h-[min(50vh,400px)]">
         <TimezoneMapInline supporters={supporters} />
       </div>
     </section>

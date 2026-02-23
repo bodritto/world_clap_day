@@ -9,12 +9,10 @@ import EmailSubscriptionForm from '@/components/EmailSubscriptionForm'
 import SecondSectionAndMap from '@/components/SecondSectionAndMap'
 import WallOfClaps from '@/components/WallOfClaps'
 import { MapRefreshProvider } from '@/lib/MapRefreshContext'
-import { getSiteSettings, getSupporters } from '@/sanity/client'
-import type { Locale } from '@/i18n/config'
+import { getClapperCount } from '@/lib/db'
 
-// Default data for when Sanity is not configured
 const defaultSettings = {
-  countdownDate: '2026-08-15T12:00:00Z', // World Clap Day date
+  countdownDate: '2026-08-15T12:00:00Z',
   supporterCount: 64241,
   socialLinks: {
     instagram: 'https://instagram.com/worldclapday',
@@ -51,29 +49,15 @@ export default async function HomePage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
 
-  let settings = defaultSettings
-  let supporters: typeof mockSupporters = mockSupporters
+  const supporters: typeof mockSupporters = mockSupporters
 
+  let supporterCount = defaultSettings.supporterCount
   try {
-    const [sanitySettings, sanitySupporters] = await Promise.all([
-      getSiteSettings().then((s) => s || null),
-      getSupporters().catch(() => []),
-    ])
-    if (sanitySettings) {
-      settings = { ...defaultSettings, ...sanitySettings }
-    }
-    if (sanitySupporters && sanitySupporters.length > 0) {
-      supporters = sanitySupporters as typeof mockSupporters
-    }
-    // Pad with mock up to 12 so the 3×4 grid is always full (for now)
-    if (supporters.length < GRID_CLAPPERS_SIZE) {
-      const need = GRID_CLAPPERS_SIZE - supporters.length
-      const pad = mockSupporters.slice(0, need).map((m, i) => ({ ...m, _id: `mock-pad-${i}` }))
-      supporters = [...supporters, ...pad]
-    }
+    supporterCount = await getClapperCount()
   } catch {
-    console.log('Using default settings')
+    console.log('Using default clapper count')
   }
+  const settings = { ...defaultSettings, supporterCount }
 
   return (
     <MapRefreshProvider>

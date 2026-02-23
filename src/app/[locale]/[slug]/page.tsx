@@ -1,9 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
-import { PortableText } from '@portabletext/react'
-import { getPolicyPage, getAllPolicySlugs } from '@/sanity/client'
-import type { Locale } from '@/i18n/config'
+import { getAllPolicySlugs, getPolicyPage } from '@/lib/policies'
 import { locales } from '@/i18n/config'
 
 type Props = {
@@ -11,35 +9,22 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  try {
-    const slugs = await getAllPolicySlugs()
-    // Generate all combinations of locale and slug
-    const params = []
-    for (const locale of locales) {
-      for (const item of slugs) {
-        params.push({
-          locale,
-          slug: item.slug,
-        })
-      }
+  const slugs = getAllPolicySlugs()
+  const params: { locale: string; slug: string }[] = []
+  for (const locale of locales) {
+    for (const { slug } of slugs) {
+      params.push({ locale, slug })
     }
-    return params
-  } catch {
-    // Return empty array if Sanity is not configured
-    return []
   }
+  return params
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale } = await params
-  const page = await getPolicyPage(slug, locale as Locale)
-  
+  const page = getPolicyPage(slug, locale)
   if (!page) {
-    return {
-      title: 'Page Not Found - World Clap Day',
-    }
+    return { title: 'Page Not Found - World Clap Day' }
   }
-
   return {
     title: `${page.title} - World Clap Day`,
   }
@@ -49,11 +34,8 @@ export default async function PolicyPage({ params }: Props) {
   const { locale, slug } = await params
   setRequestLocale(locale)
 
-  const page = await getPolicyPage(slug, locale as Locale)
-
-  if (!page) {
-    notFound()
-  }
+  const page = getPolicyPage(slug, locale)
+  if (!page) notFound()
 
   return (
     <div className="min-h-screen bg-gray-50 py-16 px-4">
@@ -62,9 +44,12 @@ export default async function PolicyPage({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
             {page.title}
           </h1>
-          
-          <div className="prose prose-lg max-w-none">
-            <PortableText value={page.content} />
+          <div className="prose prose-lg max-w-none text-foreground">
+            {page.paragraphs.map((text, i) => (
+              <p key={i} className="mb-4 last:mb-0">
+                {text}
+              </p>
+            ))}
           </div>
         </article>
       </div>

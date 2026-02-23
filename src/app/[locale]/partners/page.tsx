@@ -3,9 +3,7 @@ import { useTranslations } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
 import PartnerCard from '@/components/PartnerCard'
-import { getPartnerTypes } from '@/sanity/client'
 import { CheckCircle } from 'lucide-react'
-import type { Locale } from '@/i18n/config'
 
 // Default partner types
 const defaultPartnerTypes = [
@@ -50,18 +48,7 @@ export default async function PartnersPage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
 
-  let partnerTypes = defaultPartnerTypes
-  
-  try {
-    const sanityPartnerTypes = await getPartnerTypes(locale as Locale)
-    if (sanityPartnerTypes && sanityPartnerTypes.length > 0) {
-      partnerTypes = sanityPartnerTypes
-    }
-  } catch (error) {
-    console.log('Using default partner types')
-  }
-
-  return <PartnersContent partnerTypes={partnerTypes} />
+  return <PartnersContent partnerTypes={defaultPartnerTypes} />
 }
 
 function PartnersContent({ partnerTypes }: { partnerTypes: typeof defaultPartnerTypes }) {

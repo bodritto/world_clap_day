@@ -10,7 +10,7 @@ set -e
 
 # Configuration - UPDATE THESE VALUES
 SERVER_USER="root"
-SERVER_IP="parser"  # <-- Change this to your Digital Ocean IP (e.g., 159.65.xxx.xxx)
+SERVER_IP="tachka"  # SSH host from ~/.ssh/config (or use IP e.g. 64.226.117.124)
 APP_NAME="wcd"
 APP_PORT="3006"
 REMOTE_DIR="/var/www/$APP_NAME"
@@ -74,14 +74,12 @@ echo -e "${YELLOW}[6/7] Restarting application...${NC}"
 ssh "$SERVER_USER@$SERVER_IP" << REMOTE_SCRIPT
 cd $REMOTE_DIR
 
-# Check if PM2 process exists
+# (Re)start with current command so -H 0.0.0.0 is always used for Nginx proxy
 if pm2 describe $APP_NAME > /dev/null 2>&1; then
-    echo "Restarting existing PM2 process..."
-    pm2 restart $APP_NAME
-else
-    echo "Starting new PM2 process..."
-    pm2 start npm --name "$APP_NAME" -- start -- -p $APP_PORT
+    echo "Restarting PM2 process..."
+    pm2 delete $APP_NAME
 fi
+pm2 start npm --name "$APP_NAME" -- start -- -p $APP_PORT -H 0.0.0.0
 
 pm2 save
 REMOTE_SCRIPT

@@ -4,8 +4,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
 import DonationCard from '@/components/DonationCard'
 import WallOfClaps from '@/components/WallOfClaps'
-import { getDonationTiers, getSupporters } from '@/sanity/client'
-import type { Locale } from '@/i18n/config'
 
 // Default donation tiers
 const defaultTiers = [
@@ -35,14 +33,14 @@ const defaultTiers = [
   },
 ]
 
-// Default supporters for display
+// Default supporters for display (countryCode for WallOfClaps flags)
 const defaultSupporters = [
-  { _id: '1', name: 'Nathalie L.', country: 'France', _createdAt: '2024-01-15' },
-  { _id: '2', name: 'Alina D.', country: 'Poland', _createdAt: '2024-01-14' },
-  { _id: '3', name: 'Paolo R.', country: 'Italy', _createdAt: '2024-01-13' },
-  { _id: '4', name: 'Albert F.', country: 'UK', _createdAt: '2024-01-12' },
-  { _id: '5', name: 'Mauro B.', country: 'Italy', _createdAt: '2024-01-11' },
-  { _id: '6', name: 'Artem O.', country: 'Florida', _createdAt: '2024-01-10' },
+  { _id: '1', name: 'Nathalie L.', country: 'France', countryCode: 'FR', _createdAt: '2024-01-15' },
+  { _id: '2', name: 'Alina D.', country: 'Poland', countryCode: 'PL', _createdAt: '2024-01-14' },
+  { _id: '3', name: 'Paolo R.', country: 'Italy', countryCode: 'IT', _createdAt: '2024-01-13' },
+  { _id: '4', name: 'Albert F.', country: 'UK', countryCode: 'GB', _createdAt: '2024-01-12' },
+  { _id: '5', name: 'Mauro B.', country: 'Italy', countryCode: 'IT', _createdAt: '2024-01-11' },
+  { _id: '6', name: 'Artem O.', country: 'USA', countryCode: 'US', _createdAt: '2024-01-10' },
 ]
 
 type Props = {
@@ -63,26 +61,7 @@ export default async function SupportUsPage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
 
-  let tiers = defaultTiers
-  let supporters = defaultSupporters
-  
-  try {
-    const [sanityTiers, sanitySupporters] = await Promise.all([
-      getDonationTiers(locale as Locale),
-      getSupporters(),
-    ])
-    
-    if (sanityTiers && sanityTiers.length > 0) {
-      tiers = sanityTiers
-    }
-    if (sanitySupporters && sanitySupporters.length > 0) {
-      supporters = sanitySupporters
-    }
-  } catch (error) {
-    console.log('Using default data')
-  }
-
-  return <SupportUsContent tiers={tiers} supporters={supporters} />
+  return <SupportUsContent tiers={defaultTiers} supporters={defaultSupporters} />
 }
 
 function SupportUsContent({ 

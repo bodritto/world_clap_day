@@ -1,8 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
-import { calculateTimeLeft } from '@/lib/utils'
+import { calculateTimeLeft, getUTCDateForLocalInTimeZone } from '@/lib/utils'
+import { useTimezoneStore } from '@/lib/store'
+
+// Target moment in the user's selected timezone: 15 Aug 2026, 04:01:16
+const TARGET_LOCAL = '2026-08-15T04:01:16'
 
 interface CountdownTimerProps {
   targetDate: string | Date
@@ -16,17 +20,30 @@ interface TimeUnit {
 
 export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
   const t = useTranslations('countdown')
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(targetDate))
+  const timezone = useTimezoneStore((s) => s.timezoneInfo?.timezone)
+  const targetUTC = useMemo(() => {
+    const tz = timezone || 'UTC'
+    try {
+      return getUTCDateForLocalInTimeZone(TARGET_LOCAL, tz)
+    } catch {
+      return new Date(targetDate)
+    }
+  }, [timezone, targetDate])
+  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(targetUTC))
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(targetDate))
-    }, 1000)
+    setTimeLeft(calculateTimeLeft(targetUTC))
+  }, [targetUTC])
 
+  useEffect(() => {
+    if (!mounted) return
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft(targetUTC))
+    }, 1000)
     return () => clearInterval(timer)
-  }, [targetDate])
+  }, [mounted, targetUTC])
 
   if (!mounted) {
     return (

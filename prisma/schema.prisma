@@ -46,6 +46,16 @@ model SiteStats {
   updatedAt     DateTime @updatedAt
 }
 
+// Admin users for the built-in CMS
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 // User locations for world map visualization
 model UserLocation {
   id          String   @id @default(cuid())

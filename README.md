@@ -5,7 +5,6 @@ A modern Next.js website for World Clap Day - a global moment of unity.
 ## Tech Stack
 
 - **Framework**: Next.js 14 (App Router)
-- **CMS**: Sanity (headless CMS)
 - **Payments**: Stripe + PayPal
 - **Styling**: Tailwind CSS
 - **State Management**: Zustand
@@ -29,11 +28,6 @@ npm install
 Create a `.env.local` file with the following variables:
 
 ```env
-# Sanity
-NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=your_api_token
-
 # Stripe
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_key
 STRIPE_SECRET_KEY=sk_test_your_key
@@ -71,22 +65,19 @@ src/
 │   ├── checkout/          # Checkout and success pages
 │   ├── partners/          # Partners page
 │   ├── support-us/        # Donation tiers page
-│   └── [slug]/            # Dynamic policy pages
+│   └── [slug]/            # Static policy pages (support-policy, privacy-policy, terms-of-use)
 ├── components/            # Reusable React components
 │   ├── Header.tsx
 │   ├── Footer.tsx
 │   ├── CountdownTimer.tsx
 │   ├── DonationCard.tsx
 │   └── ...
-├── lib/                   # Utility functions and configurations
-│   ├── store.ts          # Zustand cart store
-│   ├── stripe.ts         # Stripe integration
-│   ├── paypal.ts         # PayPal integration
-│   └── utils.ts
-└── sanity/               # Sanity CMS configuration
-    ├── client.ts
-    ├── config.ts
-    └── schemas/          # Content type definitions
+└── lib/                   # Utility functions and configurations
+    ├── store.ts          # Zustand cart store
+    ├── stripe.ts         # Stripe integration
+    ├── paypal.ts         # PayPal integration
+    ├── policies.ts       # Static policy page content
+    └── utils.ts
 ```
 
 ## Deployment to Vercel
@@ -106,22 +97,6 @@ After deployment, configure webhooks:
 
 **PayPal:**
 - PayPal handles capture automatically via client-side SDK
-
-## Sanity CMS Setup
-
-1. Create a Sanity project at [sanity.io](https://sanity.io)
-2. Get your project ID and add to environment variables
-3. Create a dataset (production)
-4. Generate an API token with write access
-5. The schemas are already defined in `src/sanity/schemas/`
-
-### Content Types
-
-- **Site Settings**: Global settings (countdown date, supporter count)
-- **Donation Tier**: Support tiers ($5, $50, $500, $5000)
-- **Supporter**: Wall of Claps entries
-- **Partner Type**: Partner categories
-- **Policy Page**: Legal pages (Privacy, Terms, Support Policy)
 
 ## Features
 
