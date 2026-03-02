@@ -11,6 +11,7 @@ import {
 import { useTimezoneStore } from '@/lib/store'
 import { searchCities, type City } from '@/lib/cities'
 import { alpha2ToNumeric } from '@/lib/countryNumericIds'
+import { useClapperCount } from '@/lib/ClapperCountContext'
 
 const STORAGE_KEY = 'wcd_user_location'
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
@@ -108,6 +109,7 @@ export default function TimezoneMapInline({
   supporters = [],
 }: TimezoneMapInlineProps) {
   const t = useTranslations('worldMap')
+  const { totalCount } = useClapperCount()
   const timezoneInfo = useTimezoneStore((s) => s.timezoneInfo)
   const setTimezone = useTimezoneStore((s) => s.setTimezone)
   const [selectedOffset, setSelectedOffset] = useState(0)
@@ -117,6 +119,42 @@ export default function TimezoneMapInline({
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false)
   const cityDropdownRef = useRef<HTMLDivElement>(null)
   const cityInputRef = useRef<HTMLInputElement>(null)
+  const [sparks, setSparks] = useState<
+    { id: number; x: number; y: number; createdAt: number }[]
+  >([])
+  const sparkIdRef = useRef(0)
+  const lastTotalRef = useRef(totalCount)
+
+  // When the global clapper counter increases, spawn a few sparkles on the map.
+  useEffect(() => {
+    if (totalCount <= lastTotalRef.current) {
+      lastTotalRef.current = totalCount
+      return
+    }
+    const delta = totalCount - lastTotalRef.current
+    lastTotalRef.current = totalCount
+    const sparkCount = Math.min(Math.max(delta, 1), 3)
+    const now = Date.now()
+    setSparks((prev) => [
+      ...prev,
+      ...Array.from({ length: sparkCount }, () => ({
+        id: sparkIdRef.current++,
+        x: Math.random(),
+        y: Math.random(),
+        createdAt: now,
+      })),
+    ])
+  }, [totalCount])
+
+  // Drop old sparkles after their animation has finished.
+  useEffect(() => {
+    if (sparks.length === 0) return
+    const timeout = setTimeout(() => {
+      const cutoff = Date.now() - 1200
+      setSparks((prev) => prev.filter((s) => s.createdAt > cutoff))
+    }, 1300)
+    return () => clearTimeout(timeout)
+  }, [sparks.length])
 
   const countryCounts = useMemo(
     () =>
@@ -397,6 +435,21 @@ export default function TimezoneMapInline({
               }
             </Geographies>
           </ComposableMap>
+          {/* Sparkles indicating new claps */}
+          <div className="pointer-events-none absolute inset-0">
+            {sparks.map((spark) => (
+              <span
+                key={spark.id}
+                className="absolute rounded-full bg-amber-300 shadow-[0_0_12px_rgba(252,211,77,0.9)] spark-on-map"
+                style={{
+                  width: 10,
+                  height: 10,
+                  left: `${spark.x * 100}%`,
+                  top: `${spark.y * 100}%`,
+                }}
+              />
+            ))}
+          </div>
           {/* Stripe overlay: tap/click to select timezone (mobile + desktop) */}
           <div className="flex absolute inset-0 pointer-events-none">
             <div className="absolute inset-0 flex pointer-events-auto min-w-0">

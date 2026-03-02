@@ -124,18 +124,20 @@ export default function DonationFormBlock({ imageUrl }: Props) {
               {t('otherAmount')}
             </button>
             {selectedAmount === 'other' ? (
-              <div className="flex items-center gap-2 w-1/2 min-w-0">
-                <span className="text-foreground shrink-0 font-medium">{symbol}</span>
-                <input
-                  type="number"
-                  min={MIN_CUSTOM}
-                  step={1}
-                  value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value)}
-                  placeholder="0"
-                  className="w-full min-w-0 px-3 py-2 rounded-xl border-2 border-primary/40 bg-white text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                  aria-label={t('otherAmount')}
-                />
+              <div className="flex justify-center w-full min-w-0">
+                <div className="flex items-center gap-2 w-1/4 min-w-[5rem]">
+                  <span className="text-foreground shrink-0 font-medium">{symbol}</span>
+                  <input
+                    type="number"
+                    min={MIN_CUSTOM}
+                    step={1}
+                    value={customAmount}
+                    onChange={(e) => setCustomAmount(e.target.value)}
+                    placeholder="0"
+                    className="w-full min-w-0 px-2 py-2 rounded-xl border-2 border-primary/40 bg-white text-foreground text-sm placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                    aria-label={t('otherAmount')}
+                  />
+                </div>
               </div>
             ) : (
               <div className="py-3 px-4 rounded-xl border-2 border-transparent bg-transparent" aria-hidden />
