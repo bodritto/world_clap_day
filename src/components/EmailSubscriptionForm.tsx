@@ -1,21 +1,42 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
+import { useEmailForm } from '@/lib/EmailFormContext'
 
 export default function EmailSubscriptionForm() {
   const t = useTranslations('email')
+  const { setHasEmailValue } = useEmailForm() ?? {}
   const [email, setEmail] = useState('')
   const [agreed, setAgreed] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [validationError, setValidationError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  const isButtonEnabled = email.trim() !== '' && isValidEmail && agreed && !isSubmitting
+  const isFormValid = email.trim() !== '' && isValidEmail && agreed && !isSubmitting
+
+  useEffect(() => {
+    setHasEmailValue?.(email.trim().length > 0)
+  }, [email, setHasEmailValue])
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+    setValidationError(null)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!isButtonEnabled) return
+    setValidationError(null)
+
+    if (!isFormValid) {
+      if (!agreed) {
+        setValidationError(t('validationCheckbox'))
+      } else {
+        setValidationError(t('validationEmail'))
+      }
+      return
+    }
 
     setIsSubmitting(true)
     try {
@@ -29,6 +50,7 @@ export default function EmailSubscriptionForm() {
         setShowSuccess(true)
         setEmail('')
         setAgreed(false)
+        setHasEmailValue?.(false)
         setTimeout(() => setShowSuccess(false), 3000)
       }
     } catch (error) {
@@ -45,15 +67,15 @@ export default function EmailSubscriptionForm() {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
           placeholder={t('placeholder')}
           className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-foreground"
         />
 
         {/* Checkbox */}
-        <div 
+        <div
           className="flex items-start gap-3 cursor-pointer text-left"
-          onClick={() => setAgreed(!agreed)}
+          onClick={() => { setAgreed(!agreed); setValidationError(null) }}
         >
           <input
             type="checkbox"
@@ -67,24 +89,24 @@ export default function EmailSubscriptionForm() {
           </span>
         </div>
 
-        {/* Button Row */}
-        <div className="flex items-center gap-4">
+        {/* Button — centered */}
+        <div className="flex flex-col items-center gap-1">
           <button
             type="submit"
-            disabled={!isButtonEnabled}
-            className={`px-8 py-3 rounded-full font-medium transition-all ${
-              isButtonEnabled
-                ? 'bg-primary text-white hover:bg-primary/90 cursor-pointer'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
+            className="px-8 py-3 rounded-full font-medium transition-all bg-primary text-white hover:bg-primary/90 cursor-pointer disabled:opacity-70 disabled:cursor-wait"
+            disabled={isSubmitting}
           >
             {isSubmitting ? t('subscribing') : t('subscribe')}
           </button>
-          
-          {showSuccess && (
-            <span className="text-primary font-medium animate-fade-in">
-              {t('success')}
-            </span>
+          {/* Message directly under button — very small, fits in the gap */}
+          {(validationError || showSuccess) && (
+            <p
+              className={`text-[10px] sm:text-[11px] leading-tight text-center max-w-[min(100%,20rem)] px-1 ${
+                validationError ? 'text-amber-200/95' : 'text-primary font-medium animate-fade-in'
+              }`}
+            >
+              {validationError ?? t('success')}
+            </p>
           )}
         </div>
       </div>

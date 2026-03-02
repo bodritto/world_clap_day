@@ -147,7 +147,7 @@ export default function CityPicker({ onLocationSaved }: CityPickerProps) {
             onFocus={() => results.length > 0 && setIsOpen(true)}
             placeholder={t('placeholder')}
             disabled={isSubmitting}
-            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-foreground disabled:opacity-50"
+            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-foreground disabled:opacity-50 text-base"
           />
         </div>
 

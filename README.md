@@ -25,20 +25,10 @@ npm install
 
 ### Environment Variables
 
-Create a `.env.local` file with the following variables:
+Copy `.env.example` to `.env.local` and fill in the values. For **production**, set Stripe to your live keys (`pk_live_...`, `sk_live_...`) in your host's env (e.g. Vercel).
 
-```env
-# Stripe
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_key
-STRIPE_SECRET_KEY=sk_test_your_key
-STRIPE_WEBHOOK_SECRET=whsec_your_secret
-
-# PayPal
-NEXT_PUBLIC_PAYPAL_CLIENT_ID=your_client_id
-PAYPAL_CLIENT_SECRET=your_client_secret
-
-# Site URL (for webhooks)
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```bash
+cp .env.example .env.local
 ```
 
 ### Development

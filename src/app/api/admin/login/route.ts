@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/db'
-import { createToken, setAuthCookie } from '@/lib/auth'
+import { createToken, COOKIE_NAME, TOKEN_MAX_AGE } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   if (!prisma) {
@@ -26,9 +26,21 @@ export async function POST(request: NextRequest) {
     }
 
     const token = await createToken({ userId: user.id, email: user.email })
-    await setAuthCookie(token)
 
-    return NextResponse.json({ ok: true, user: { id: user.id, email: user.email, name: user.name } })
+    const response = NextResponse.json({
+      ok: true,
+      user: { id: user.id, email: user.email, name: user.name },
+    })
+
+    response.cookies.set(COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: TOKEN_MAX_AGE,
+      path: '/',
+    })
+
+    return response
   } catch (error) {
     console.error('Login error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

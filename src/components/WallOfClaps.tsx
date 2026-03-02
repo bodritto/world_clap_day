@@ -1,5 +1,7 @@
 'use client'
 
+import { getFlagEmoji } from '@/lib/utils'
+
 interface Supporter {
   _id: string
   name: string
@@ -11,15 +13,6 @@ interface Supporter {
 
 interface WallOfClapsProps {
   supporters: Supporter[]
-}
-
-/** Convert ISO 3166-1 alpha-2 code to flag emoji (e.g. "US" -> 🇺🇸) */
-function getFlagEmoji(countryCode: string): string {
-  const code = (countryCode || '').toUpperCase().slice(0, 2)
-  if (code.length !== 2) return ''
-  return [...code]
-    .map((c) => String.fromCodePoint(0x1f1e6 - 65 + c.charCodeAt(0)))
-    .join('')
 }
 
 /** Country name -> alpha-2 for common names (fallback when only country is set) */

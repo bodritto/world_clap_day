@@ -37,7 +37,10 @@
     "consent": "Ich möchte E-Mail-Updates zum Weltapplaustag erhalten, einschließlich Ankündigungen und Erinnerungen. Ich kann mich jederzeit abmelden.",
     "subscribe": "Abonnieren",
     "subscribing": "Wird abonniert...",
-    "success": "Sie sind dabei!"
+    "success": "Sie sind dabei!",
+    "validationMessage": "Bitte gib eine gültige E-Mail ein und akzeptiere die Einwilligung oben.",
+    "validationCheckbox": "Bitte setze oben einen Haken.",
+    "validationEmail": "Bitte gib eine gültige E-Mail ein."
   },
   "worldTimes": {
     "date": "16. August 2026",
@@ -63,7 +66,27 @@
   },
   "donationCard": {
     "addToCart": "In den Warenkorb",
-    "addedToCart": "Hinzugefügt"
+    "addedToCart": "Hinzugefügt",
+    "smallDonation": "Kleine Spende",
+    "bigDonation": "Große Spende",
+    "whateverDonation": "Beliebiger Betrag",
+    "customAmountPlaceholder": "Betrag",
+    "recommendMin": "Jeder Betrag willkommen. Wir empfehlen mindestens {amount}.",
+    "currency": "Währung",
+    "smallBenefit": "Danke für die Spende. Das hilft uns wirklich.",
+    "bigBenefit": "REAL CLAP",
+    "whateverBenefit": "Was auch immer du geben möchtest – wir freuen uns."
+  },
+  "donationForm": {
+    "currency": "Währung",
+    "chooseAmount": "Betrag wählen",
+    "otherAmount": "Anderer Betrag",
+    "payWithCard": "Mit Visa, MasterCard unterstützen",
+    "redirecting": "Weiterleitung...",
+    "stripeDisclaimer": "Alle Zahlungen werden von Stripe abgewickelt.",
+    "leftText1": "World Clap Day ist eine Community-Initiative. Deine Unterstützung hilft uns, die Plattform zu bauen, Medien zu erstellen und einen wirklich globalen Moment zu koordinieren.",
+    "leftText2": "Tausende Menschen wie du helfen uns, für ein gesundes Internet für alle einzutreten. Wir sind auf Unterstützung angewiesen. Wirst du heute unterstützen?",
+    "supportLabel": "Unterstützung — {amount}"
   },
   "cart": {
     "title": "Ihr Warenkorb",
@@ -94,15 +117,17 @@
     "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
   "success": {
-    "title": "Vielen Dank!",
-    "subtitle": "Ihre Unterstützung bedeutet uns sehr viel. Sie sind jetzt Teil der globalen Bewegung!",
-    "wallOfClapsTitle": "Sie sind auf der Wand des Applauses!",
-    "wallOfClapsText": "Ihr Name wird auf der Wand des Applauses erscheinen und sich Tausenden von Unterstützern aus der ganzen Welt anschließen.",
-    "whatsNext": "Was passiert als nächstes?",
-    "step1": "Sie erhalten in Kürze eine Bestätigungs-E-Mail",
-    "step2": "Ihr Name wird auf der Wand des Applauses erscheinen",
-    "step3": "Teilen Sie die Bewegung mit Freunden und Familie",
-    "step4": "Markieren Sie den Weltapplaustag in Ihrem Kalender!",
+    "title": "VIELEN DANK",
+    "subtitle": "Für Ihre Spende — wir sind wirklich dankbar.",
+    "wallIntro": "Wenn Sie möchten, dass wir Sie zur Wand der Clapper hinzufügen, geben Sie bitte Vor- und Nachname ein (wir zeigen nur den ersten Buchstaben), Ihre E-Mail und Ihr Land.",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "country": "Land",
+    "countryPlaceholder": "Land suchen...",
+    "previewCardTitle": "So erscheinen Sie auf der Wand",
+    "submit": "Mich zur Wand hinzufügen",
+    "submitSuccess": "Sie sind auf der Wand!",
     "returnHome": "Zur Startseite",
     "shareOnX": "Auf X/Twitter Teilen"
   },
@@ -158,6 +183,7 @@
     "participants": "Klatscher",
     "selectOnMap": "Wähle eine Zeitzone in der Liste oder klicke auf die Karte.",
     "searchCityPlaceholder": "Stadt suchen...",
+    "stripeLabelsHint": "UTC",
     "hoursFromUtc": "{offset} Stunden von UTC"
   },
   "mainClock": {

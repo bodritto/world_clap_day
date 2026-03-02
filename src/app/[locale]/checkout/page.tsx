@@ -26,6 +26,8 @@ function CheckoutContent() {
     setMounted(true)
   }, [])
 
+  const currency = useCartStore((state) => state.currency) ?? 'eur'
+
   const handleStripeCheckout = async () => {
     setIsLoading(true)
     setError(null)
@@ -41,6 +43,7 @@ function CheckoutContent() {
             quantity: item.quantity,
           })),
           supporterName: supporterName || 'Anonymous',
+          currency,
         }),
       })
 
@@ -176,7 +179,7 @@ function CheckoutContent() {
                     {item.name} × {item.quantity}
                   </span>
                   <span className="text-foreground font-medium">
-                    {formatPrice(item.price * item.quantity)}
+                    {formatPrice(item.price * item.quantity, currency)}
                   </span>
                 </div>
               ))}
@@ -184,7 +187,7 @@ function CheckoutContent() {
             <div className="pt-4 border-t border-border flex justify-between">
               <span className="text-lg font-semibold text-foreground">{t('total')}</span>
               <span className="text-2xl font-bold text-primary">
-                {formatPrice(getTotal())}
+                {formatPrice(getTotal(), currency)}
               </span>
             </div>
           </div>

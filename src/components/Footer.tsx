@@ -7,8 +7,8 @@ export default function Footer() {
   const t = useTranslations('footer')
 
   return (
-    <footer className="bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <footer className="bg-white shrink-0 h-24 flex items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 flex-wrap">
           <nav className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-sm text-muted order-2 sm:order-1">
             <Link href="/support-policy" className="hover:text-primary transition-colors">

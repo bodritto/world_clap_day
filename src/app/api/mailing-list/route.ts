@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { subscribeToMailingList, unsubscribeFromMailingList } from '@/lib/db'
+import { subscribeToMailingList, unsubscribeFromMailingList, incrementClapperCount } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     const subscriber = await subscribeToMailingList(email, name)
+    await incrementClapperCount()
 
     if (!subscriber) {
       return NextResponse.json({

@@ -1,6 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
+import {
+  pickCountryFromDistribution,
+  getAllDistributionCodes,
+  COUNTRY_WEIGHTS,
+} from '@/lib/clapperCountryDistribution'
 
 // Allow self-signed certificates for DigitalOcean managed databases
 if (process.env.DATABASE_URL?.includes('digitalocean.com')) {
@@ -20,9 +25,12 @@ function createPrismaClient() {
     return null
   }
 
+  const isRemote = connectionString.includes('digitalocean.com') ||
+                   connectionString.includes('sslmode=require')
+
   const pool = new Pool({ 
     connectionString,
-    ssl: { rejectUnauthorized: false }
+    ssl: isRemote ? { rejectUnauthorized: false } : false,
   })
   const adapter = new PrismaPg(pool)
   
@@ -42,6 +50,8 @@ if (process.env.NODE_ENV !== 'production' && prisma) {
 export async function addSupporter(data: {
   name: string
   email?: string
+  country?: string
+  countryCode?: string
   tier?: string
   amount?: number
   paymentMethod?: string
@@ -56,6 +66,8 @@ export async function addSupporter(data: {
     data: {
       name: data.name,
       email: data.email,
+      country: data.country,
+      countryCode: data.countryCode,
       tier: data.tier || 'single-clap',
       amount: data.amount,
       paymentMethod: data.paymentMethod,
@@ -67,6 +79,23 @@ export async function addSupporter(data: {
   await incrementClapperCount()
 
   return supporter
+}
+
+/** Update supporter by Stripe session ID (paymentId) with wall-of-clappers form data */
+export async function updateSupporterByPaymentId(
+  paymentId: string,
+  data: { name: string; email?: string; country?: string; countryCode?: string }
+) {
+  if (!prisma) return null
+  return prisma.supporter.updateMany({
+    where: { paymentId },
+    data: {
+      name: data.name,
+      email: data.email,
+      country: data.country,
+      countryCode: data.countryCode,
+    },
+  })
 }
 
 export async function getClapperCount(): Promise<number> {
@@ -81,26 +110,129 @@ export async function getClapperCount(): Promise<number> {
   if (!stats) {
     // Initialize stats if they don't exist
     const newStats = await prisma.siteStats.create({
-      data: { id: 'main', clapperCount: 64241 },
+      data: { id: 'main', clapperCount: 64241, clapperCountFixed: 64241 },
     })
     return newStats.clapperCount
   }
-  
+
   return stats.clapperCount
 }
 
-export async function incrementClapperCount(): Promise<number> {
+export async function getClapperCountFixed(): Promise<number> {
   if (!prisma) {
     return 64241
   }
 
+  const stats = await prisma.siteStats.findUnique({
+    where: { id: 'main' },
+  })
+
+  if (!stats) {
+    return 64241
+  }
+
+  return stats.clapperCountFixed ?? stats.clapperCount
+}
+
+export async function incrementClapperCount(): Promise<number> {
+  if (!prisma) return 64241
+  const { total } = await incrementClapperCountByCountry()
+  return total
+}
+
+/** Set both current and fixed count (e.g. when admin sets value manually). Reseeds per-country counts from new total. */
+export async function setClapperCountManually(count: number): Promise<{ clapperCount: number; clapperCountFixed: number }> {
+  if (!prisma) {
+    return { clapperCount: 64241, clapperCountFixed: 64241 }
+  }
+  await (prisma as any).clapperCountryCount.deleteMany({})
+  await seedClapperCountryCountsFromTotal(count)
+  const stats = await prisma.siteStats.upsert({
+    where: { id: 'main' },
+    update: { clapperCount: count, clapperCountFixed: count },
+    create: { id: 'main', clapperCount: count, clapperCountFixed: count },
+  })
+  return { clapperCount: stats.clapperCount, clapperCountFixed: stats.clapperCountFixed }
+}
+
+const TOTAL_WEIGHT = COUNTRY_WEIGHTS.reduce((s, x) => s + x.weight, 0)
+
+/** Get clapper counts by country (alpha-2). Used for map coloring. */
+export async function getClapperCountsByCountry(): Promise<Record<string, number>> {
+  if (!prisma) return {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rows = await (prisma as any).clapperCountryCount.findMany()
+  return rows.reduce(
+    (acc: Record<string, number>, r: { countryCode: string; count: number }) => {
+      acc[r.countryCode] = r.count
+      return acc
+    },
+    {} as Record<string, number>
+  )
+}
+
+/** Seed ClapperCountryCount from current SiteStats total (proportional to distribution). Call when table is empty. */
+async function seedClapperCountryCountsFromTotal(total: number): Promise<void> {
+  if (!prisma) return
+  const now = new Date()
+  let remaining = total
+  const codes = getAllDistributionCodes()
+  const entries: { countryCode: string; count: number; updatedAt: Date }[] = []
+  for (let i = 0; i < codes.length; i++) {
+    const code = codes[i]!
+    const weight = COUNTRY_WEIGHTS[i]!.weight
+    const count =
+      i < codes.length - 1
+        ? Math.min(remaining, Math.round((total * weight) / TOTAL_WEIGHT))
+        : Math.max(0, remaining)
+    remaining -= count
+    entries.push({ countryCode: code, count, updatedAt: now })
+  }
+  await (prisma as any).clapperCountryCount.createMany({ data: entries })
+  const sum = entries.reduce((s, e) => s + e.count, 0)
+  await prisma.siteStats.upsert({
+    where: { id: 'main' },
+    update: { clapperCount: sum },
+    create: { id: 'main', clapperCount: sum, clapperCountFixed: sum },
+  })
+}
+
+/** Increment one country by 1 (picked from distribution) and total. Returns new total. */
+export async function incrementClapperCountByCountry(): Promise<{ countryCode: string; total: number }> {
+  if (!prisma) {
+    return { countryCode: 'US', total: 64241 }
+  }
+  const existing = await (prisma as any).clapperCountryCount.count()
+  if (existing === 0) {
+    const stats = await prisma.siteStats.findUnique({ where: { id: 'main' } })
+    const total = stats?.clapperCount ?? 64241
+    await seedClapperCountryCountsFromTotal(total)
+  }
+  const countryCode = pickCountryFromDistribution()
+  const now = new Date()
+  await (prisma as any).clapperCountryCount.upsert({
+    where: { countryCode },
+    update: { count: { increment: 1 }, updatedAt: now },
+    create: { countryCode, count: 1, updatedAt: now },
+  })
   const stats = await prisma.siteStats.upsert({
     where: { id: 'main' },
     update: { clapperCount: { increment: 1 } },
-    create: { id: 'main', clapperCount: 64242 },
+    create: { id: 'main', clapperCount: 64242, clapperCountFixed: 64241 },
   })
-  
-  return stats.clapperCount
+  return { countryCode, total: stats.clapperCount }
+}
+
+/** Add 1–5 to clapper count by country (weighted). Call every 5s from cron. Returns new total. */
+export async function incrementClapperCountRandom(): Promise<number> {
+  if (!prisma) return 64241
+  const add = Math.floor(Math.random() * 5) + 1
+  let total = 0
+  for (let i = 0; i < add; i++) {
+    const r = await incrementClapperCountByCountry()
+    total = r.total
+  }
+  return total
 }
 
 // Helper functions for mailing list

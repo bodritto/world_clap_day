@@ -11,6 +11,7 @@ interface CartItemProps {
 export default function CartItem({ item }: CartItemProps) {
   const updateQuantity = useCartStore((state) => state.updateQuantity)
   const removeItem = useCartStore((state) => state.removeItem)
+  const currency = useCartStore((state) => state.currency) ?? 'eur'
 
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-border">
@@ -22,7 +23,7 @@ export default function CartItem({ item }: CartItemProps) {
       {/* Details */}
       <div className="flex-1 min-w-0">
         <h3 className="font-semibold text-foreground">{item.name}</h3>
-        <p className="text-primary font-medium">{formatPrice(item.price)}</p>
+        <p className="text-primary font-medium">{formatPrice(item.price, currency)}</p>
       </div>
 
       {/* Quantity Controls */}
@@ -47,7 +48,7 @@ export default function CartItem({ item }: CartItemProps) {
       {/* Subtotal */}
       <div className="text-right min-w-[80px]">
         <p className="font-bold text-foreground">
-          {formatPrice(item.price * item.quantity)}
+          {formatPrice(item.price * item.quantity, currency)}
         </p>
       </div>
 

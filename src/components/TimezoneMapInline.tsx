@@ -15,7 +15,16 @@ import { alpha2ToNumeric } from '@/lib/countryNumericIds'
 const STORAGE_KEY = 'wcd_user_location'
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 
-/** Country counts keyed by numeric id (for world-atlas). */
+/** Alpha-2 country counts → numeric id counts (for world-atlas). */
+function alpha2CountsToNumeric(byAlpha2: Record<string, number>): Record<string, number> {
+  const byNumeric: Record<string, number> = {}
+  for (const [code, count] of Object.entries(byAlpha2)) {
+    const num = alpha2ToNumeric[code]
+    if (num) byNumeric[num] = count
+  }
+  return byNumeric
+}
+
 function supportersToCountryCounts(
   supporters: { countryCode?: string }[]
 ): Record<string, number> {
@@ -24,12 +33,7 @@ function supportersToCountryCounts(
     const code = (s.countryCode || '').toUpperCase().slice(0, 2)
     if (code) byAlpha2[code] = (byAlpha2[code] || 0) + 1
   }
-  const byNumeric: Record<string, number> = {}
-  for (const [code, count] of Object.entries(byAlpha2)) {
-    const num = alpha2ToNumeric[code]
-    if (num) byNumeric[num] = count
-  }
-  return byNumeric
+  return alpha2CountsToNumeric(byAlpha2)
 }
 
 function getCountryFill(count: number | undefined, maxCount: number): string {
@@ -93,11 +97,16 @@ function formatHoursFromUtcOffset(offsetHours: number): string {
 }
 
 interface TimezoneMapInlineProps {
-  /** Optional: supporters with countryCode to color countries on the map */
+  /** Clapper counts by country (alpha-2). When provided, map is colored by these. */
+  countryCounts?: Record<string, number>
+  /** Fallback: supporters with countryCode when countryCounts not provided */
   supporters?: { countryCode?: string }[]
 }
 
-export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInlineProps) {
+export default function TimezoneMapInline({
+  countryCounts: countryCountsAlpha2,
+  supporters = [],
+}: TimezoneMapInlineProps) {
   const t = useTranslations('worldMap')
   const timezoneInfo = useTimezoneStore((s) => s.timezoneInfo)
   const setTimezone = useTimezoneStore((s) => s.setTimezone)
@@ -110,8 +119,11 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
   const cityInputRef = useRef<HTMLInputElement>(null)
 
   const countryCounts = useMemo(
-    () => supportersToCountryCounts(supporters),
-    [supporters]
+    () =>
+      countryCountsAlpha2 != null && Object.keys(countryCountsAlpha2).length > 0
+        ? alpha2CountsToNumeric(countryCountsAlpha2)
+        : supportersToCountryCounts(supporters),
+    [countryCountsAlpha2, supporters]
   )
   const maxCount = useMemo(
     () => Math.max(...Object.values(countryCounts), 1),
@@ -239,7 +251,7 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
               onChange={(e) => setCityQuery(e.target.value)}
               onFocus={() => cityResults.length > 0 && setCityDropdownOpen(true)}
               placeholder={t('searchCityPlaceholder')}
-              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-gray-300 bg-white text-foreground placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+              className="w-full pl-9 pr-3 py-2.5 text-base rounded-lg border border-gray-300 bg-white text-foreground placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
               aria-autocomplete="list"
               aria-expanded={cityDropdownOpen}
             />
@@ -269,7 +281,7 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
             id="tz-offset-mobile"
             value={selectedOffset}
             onChange={(e) => handleSelect(Number(e.target.value))}
-            className="shrink-0 w-auto min-w-[5rem] py-2.5 px-3 text-sm rounded-lg border border-gray-300 bg-white text-foreground cursor-pointer touch-manipulation"
+            className="shrink-0 w-auto min-w-[5rem] py-2.5 px-3 text-base rounded-lg border border-gray-300 bg-white text-foreground cursor-pointer touch-manipulation"
           >
             {offsets.map((offset) => (
               <option key={offset} value={offset}>
@@ -278,9 +290,9 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
             ))}
           </select>
         </div>
-        {/* Mobile: итоговый часовой пояс — только UTC±N, крупно, по центру, с отступами */}
+        {/* Mobile: итоговый часовой пояс — My Timezone: UTC±N, крупно, по центру, с отступами */}
         <p className="text-2xl font-bold text-foreground tabular-nums text-center my-5">
-          {formatUtcLabel(selectedOffset)}
+          My Timezone: {formatUtcLabel(selectedOffset)}
         </p>
       </div>
 
@@ -296,7 +308,7 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
               onChange={(e) => setCityQuery(e.target.value)}
               onFocus={() => cityResults.length > 0 && setCityDropdownOpen(true)}
               placeholder={t('searchCityPlaceholder')}
-              className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 bg-white text-foreground placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+              className="w-full pl-10 pr-4 py-2.5 text-base rounded-lg border border-gray-300 bg-white text-foreground placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
               aria-autocomplete="list"
               aria-expanded={cityDropdownOpen}
             />
@@ -335,10 +347,10 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
             ))}
           </select>
         </div>
-        {/* Desktop: итоговый часовой пояс — только UTC±N, по центру над картой, крупно как заголовок, с отступами */}
+        {/* Desktop: итоговый часовой пояс — My Timezone: UTC±N, по центру над картой, крупно как заголовок, с отступами */}
         <div className="flex justify-center text-center my-6">
           <span className="text-2xl sm:text-3xl font-bold text-foreground tabular-nums">
-            {formatUtcLabel(selectedOffset)}
+            My Timezone: {formatUtcLabel(selectedOffset)}
           </span>
         </div>
       </div>
@@ -346,16 +358,19 @@ export default function TimezoneMapInline({ supporters = [] }: TimezoneMapInline
 
       {/* Map (same on mobile and desktop): countries colored; stripe labels + overlay for selection */}
       <div className="w-full min-w-0">
-        {/* Stripe labels: above stripes (smaller on mobile) */}
-        <div className="flex w-full mb-1 min-w-0">
-          {offsets.map((offset) => (
-            <div
-              key={offset}
-              className="flex-1 min-w-0 text-center text-[10px] sm:text-xs font-medium text-muted tabular-nums truncate"
-            >
-              {formatStripeLabel(offset)}
-            </div>
-          ))}
+        {/* Stripe labels: hidden on mobile (select + big UTC label are enough); on desktop show with caption */}
+        <div className="hidden sm:flex w-full mb-1 min-w-0 items-baseline gap-1">
+          <span className="text-xs text-muted shrink-0">{t('stripeLabelsHint')}</span>
+          <div className="flex flex-1 min-w-0">
+            {offsets.map((offset) => (
+              <div
+                key={offset}
+                className="flex-1 min-w-0 text-center text-xs font-medium text-muted tabular-nums truncate"
+              >
+                {formatStripeLabel(offset)}
+              </div>
+            ))}
+          </div>
         </div>
         <div className="relative w-full min-w-0 overflow-hidden rounded-lg bg-gray-100" style={{ aspectRatio: '2/1', minHeight: '240px' }}>
           <ComposableMap

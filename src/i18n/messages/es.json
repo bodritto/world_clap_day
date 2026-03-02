@@ -37,7 +37,10 @@
     "consent": "Quiero recibir actualizaciones por correo sobre el Día Mundial del Aplauso, incluyendo anuncios y recordatorios. Puedo cancelar mi suscripción en cualquier momento.",
     "subscribe": "Suscribirse",
     "subscribing": "Suscribiendo...",
-    "success": "¡Ya estás dentro!"
+    "success": "¡Ya estás dentro!",
+    "validationMessage": "Introduce un correo válido y acepta el consentimiento anterior.",
+    "validationCheckbox": "Marca la casilla de arriba.",
+    "validationEmail": "Introduce un correo electrónico válido."
   },
   "worldTimes": {
     "date": "16 de Agosto de 2026",
@@ -63,7 +66,27 @@
   },
   "donationCard": {
     "addToCart": "Añadir al Carrito",
-    "addedToCart": "Añadido al Carrito"
+    "addedToCart": "Añadido al Carrito",
+    "smallDonation": "Donación pequeña",
+    "bigDonation": "Donación grande",
+    "whateverDonation": "Lo que quieras",
+    "customAmountPlaceholder": "Importe",
+    "recommendMin": "Cualquier importe es bienvenido. Recomendamos al menos {amount}.",
+    "currency": "Moneda",
+    "smallBenefit": "Gracias por el donativo. Nos ayuda de verdad.",
+    "bigBenefit": "REAL CLAP",
+    "whateverBenefit": "Lo que estés dispuesto a dar, nos alegra."
+  },
+  "donationForm": {
+    "currency": "Moneda",
+    "chooseAmount": "Elegir importe",
+    "otherAmount": "Otro importe",
+    "payWithCard": "Apoyar con Visa, MasterCard",
+    "redirecting": "Redirigiendo...",
+    "stripeDisclaimer": "Todos los pagos son procesados por Stripe.",
+    "leftText1": "World Clap Day es una iniciativa comunitaria. Tu apoyo nos ayuda a construir la plataforma, crear medios y coordinar un momento verdaderamente global.",
+    "leftText2": "Miles de personas como tú nos ayudan a defender un internet saludable para todos. Dependemos de tu apoyo. ¿Apoyarás hoy?",
+    "supportLabel": "Apoyo — {amount}"
   },
   "cart": {
     "title": "Tu Carrito",
@@ -94,15 +117,17 @@
     "paymentFailed": "El pago falló. Por favor, intenta de nuevo."
   },
   "success": {
-    "title": "¡Gracias!",
-    "subtitle": "Tu apoyo significa mucho para nosotros. ¡Ahora eres parte del movimiento global!",
-    "wallOfClapsTitle": "¡Estás en el Muro de Aplausos!",
-    "wallOfClapsText": "Tu nombre aparecerá en el Muro de Aplausos, uniéndote a miles de seguidores de todo el mundo.",
-    "whatsNext": "¿Qué sigue?",
-    "step1": "Recibirás un correo de confirmación en breve",
-    "step2": "Tu nombre aparecerá en el Muro de Aplausos",
-    "step3": "Comparte el movimiento con amigos y familiares",
-    "step4": "¡Marca tu calendario para el Día Mundial del Aplauso!",
+    "title": "MUCHAS GRACIAS",
+    "subtitle": "Por tu donación — estamos muy agradecidos.",
+    "wallIntro": "Si quieres que te añadamos al Muro de Clappers, escribe tu nombre y apellido (solo mostraremos la primera letra), tu email y tu país.",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Email",
+    "country": "País",
+    "countryPlaceholder": "Buscar país...",
+    "previewCardTitle": "Así aparecerás en el Muro",
+    "submit": "Añadirme al Muro",
+    "submitSuccess": "¡Estás en el Muro!",
     "returnHome": "Volver al Inicio",
     "shareOnX": "Compartir en X/Twitter"
   },
@@ -158,6 +183,7 @@
     "participants": "aplaudidores",
     "selectOnMap": "Elige una zona horaria en la lista o haz clic en el mapa.",
     "searchCityPlaceholder": "Buscar ciudad...",
+    "stripeLabelsHint": "UTC",
     "hoursFromUtc": "{offset} horas desde UTC"
   },
   "mainClock": {

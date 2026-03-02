@@ -13,6 +13,7 @@ export default function CartPage() {
   const items = useCartStore((state) => state.items)
   const getTotal = useCartStore((state) => state.getTotal)
   const clearCart = useCartStore((state) => state.clearCart)
+  const currency = useCartStore((state) => state.currency) ?? 'eur'
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function CartPage() {
           <div className="flex items-center justify-between mb-6">
             <span className="text-lg text-muted">{t('total')}</span>
             <span className="text-3xl font-bold text-foreground">
-              {formatPrice(getTotal())}
+              {formatPrice(getTotal(), currency)}
             </span>
           </div>
 

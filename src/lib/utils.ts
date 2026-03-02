@@ -4,10 +4,32 @@ export function cn(...inputs: ClassValue[]) {
   return clsx(inputs)
 }
 
-export function formatPrice(price: number): string {
+export type DonationCurrency = 'eur' | 'usd' | 'gbp'
+
+const CURRENCY_SYMBOLS: Record<DonationCurrency, string> = {
+  eur: '€',
+  usd: '$',
+  gbp: '£',
+}
+
+export function getCurrencySymbol(currency: DonationCurrency): string {
+  return CURRENCY_SYMBOLS[currency]
+}
+
+/** Convert ISO 3166-1 alpha-2 code to flag emoji (e.g. "US" -> 🇺🇸) */
+export function getFlagEmoji(countryCode: string): string {
+  const code = (countryCode || '').toUpperCase().slice(0, 2)
+  if (code.length !== 2) return ''
+  return [...code]
+    .map((c) => String.fromCodePoint(0x1f1e6 - 65 + c.charCodeAt(0)))
+    .join('')
+}
+
+export function formatPrice(price: number, currency: DonationCurrency = 'usd'): string {
+  const currencyUpper = currency.toUpperCase()
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
+    currency: currencyUpper,
   }).format(price)
 }
 

@@ -15,6 +15,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
 
   const [clapperCount, setClapperCount] = useState<number | null>(null)
+  const [fixedCount, setFixedCount] = useState<number | null>(null)
   const [newCount, setNewCount] = useState('')
   const [saving, setSaving] = useState(false)
   const [saveMsg, setSaveMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
@@ -25,6 +26,7 @@ export default function AdminDashboard() {
       if (res.ok) {
         const data = await res.json()
         setClapperCount(data.count)
+        setFixedCount(data.fixedCount ?? data.count)
         setNewCount(String(data.count))
       }
     } catch { /* ignore */ }
@@ -79,6 +81,7 @@ export default function AdminDashboard() {
 
       const data = await res.json()
       setClapperCount(data.count)
+      setFixedCount(data.fixedCount ?? data.count)
       setNewCount(String(data.count))
       setSaveMsg({ type: 'ok', text: 'Saved!' })
       setTimeout(() => setSaveMsg(null), 3000)
@@ -128,11 +131,21 @@ export default function AdminDashboard() {
 
           {clapperCount !== null ? (
             <div className="space-y-4">
-              <div className="flex items-baseline gap-2">
-                <span className="text-sm text-gray-500">Current:</span>
-                <span className="text-3xl font-bold tabular-nums text-gray-900">
-                  {clapperCount.toLocaleString()}
-                </span>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm text-gray-500">Current (live):</span>
+                  <span className="text-3xl font-bold tabular-nums text-gray-900">
+                    {clapperCount.toLocaleString()}
+                  </span>
+                </div>
+                {fixedCount !== null && fixedCount !== clapperCount && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm text-gray-500">Fixed (manual baseline):</span>
+                    <span className="text-lg tabular-nums text-gray-600">
+                      {fixedCount.toLocaleString()}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div>

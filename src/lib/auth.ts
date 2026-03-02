@@ -5,8 +5,8 @@ const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'wcd-admin-secret-change-in-production'
 )
 
-const COOKIE_NAME = 'wcd-admin-token'
-const TOKEN_MAX_AGE = 60 * 60 * 24 // 24 hours
+export const COOKIE_NAME = 'wcd-admin-token'
+export const TOKEN_MAX_AGE = 60 * 60 * 24 // 24 hours
 
 export interface AdminPayload {
   userId: string
@@ -28,22 +28,6 @@ export async function verifyToken(token: string): Promise<AdminPayload | null> {
   } catch {
     return null
   }
-}
-
-export async function setAuthCookie(token: string) {
-  const cookieStore = await cookies()
-  cookieStore.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: TOKEN_MAX_AGE,
-    path: '/',
-  })
-}
-
-export async function removeAuthCookie() {
-  const cookieStore = await cookies()
-  cookieStore.delete(COOKIE_NAME)
 }
 
 export async function getAuthFromCookies(): Promise<AdminPayload | null> {

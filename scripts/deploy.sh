@@ -48,9 +48,6 @@ rsync -avz --delete \
     --exclude='.env' \
     --exclude='.env.local' \
     --exclude='.env*.local' \
-    --include='scripts/' \
-    --include='scripts/seed_locations.py' \
-    --exclude='scripts/***' \
     --exclude='.DS_Store' \
     --exclude='*.log' \
     "$PROJECT_DIR/" "$SERVER_USER@$SERVER_IP:$REMOTE_DIR/"
@@ -70,17 +67,22 @@ echo -e "${YELLOW}[5/7] Building on server...${NC}"
 # (react-simple-maps has an outdated React peer range and can make npm error).
 ssh "$SERVER_USER@$SERVER_IP" "cd $REMOTE_DIR && rm -rf .next && npm run build && npm prune --omit=dev --legacy-peer-deps"
 
-echo -e "${YELLOW}[6/7] Restarting application...${NC}"
-ssh "$SERVER_USER@$SERVER_IP" << REMOTE_SCRIPT
+echo -e "${YELLOW}[6/7] Restarting application and clapper-tick cron...${NC}"
+CLAPPER_BASE_URL="https://wcd.sleephackers.club"
+ssh "$SERVER_USER@$SERVER_IP" "cd $REMOTE_DIR && export \$(grep -E '^CRON_SECRET=' .env 2>/dev/null | xargs) && export BASE_URL=$CLAPPER_BASE_URL && bash -s" << REMOTE_SCRIPT
 cd $REMOTE_DIR
 
-# (Re)start with current command so -H 0.0.0.0 is always used for Nginx proxy
+# (Re)start main app
 if pm2 describe $APP_NAME > /dev/null 2>&1; then
-    echo "Restarting PM2 process..."
     pm2 delete $APP_NAME
 fi
 pm2 start npm --name "$APP_NAME" -- start -- -p $APP_PORT -H 0.0.0.0
 
+# Clapper-tick cron: call /api/cron/clapper-tick every 5s (restart on deploy to pick up script changes)
+if pm2 describe wcd-clapper-tick > /dev/null 2>&1; then
+    pm2 delete wcd-clapper-tick
+fi
+pm2 start scripts/clapper-tick-cron.js --name wcd-clapper-tick
 pm2 save
 REMOTE_SCRIPT
 

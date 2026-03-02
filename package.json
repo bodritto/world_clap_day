@@ -7,7 +7,10 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "seed:locations": "node scripts/seed-locations.cjs"
+    "db:setup": "bash scripts/setup-local-db.sh",
+    "db:migrate": "prisma migrate deploy",
+    "seed:locations": "node scripts/seed-locations.cjs",
+    "seed:clappers": "node scripts/seed-clapper-counts.cjs"
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^8.9.2",

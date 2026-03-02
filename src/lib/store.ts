@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import type { DonationCurrency } from './utils'
 
 export interface CartItem {
   id: string
@@ -11,7 +12,9 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[]
-  addItem: (item: Omit<CartItem, 'quantity'>) => void
+  /** Currency for the whole cart (set when first item is added). */
+  currency: DonationCurrency | null
+  addItem: (item: Omit<CartItem, 'quantity'>, currency?: DonationCurrency) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
   clearCart: () => void
@@ -52,11 +55,14 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      
-      addItem: (item) => {
-        const items = get().items
+      currency: null,
+
+      addItem: (item, currency) => {
+        const state = get()
+        const items = state.items
         const existingItem = items.find((i) => i.id === item.id)
-        
+        const newCurrency = state.currency ?? currency ?? 'eur'
+
         if (existingItem) {
           set({
             items: items.map((i) =>
@@ -66,7 +72,10 @@ export const useCartStore = create<CartStore>()(
             ),
           })
         } else {
-          set({ items: [...items, { ...item, quantity: 1 }] })
+          set({
+            items: [...items, { ...item, quantity: 1 }],
+            currency: state.currency ?? currency ?? 'eur',
+          })
         }
       },
       
@@ -86,7 +95,7 @@ export const useCartStore = create<CartStore>()(
         })
       },
       
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], currency: null }),
       
       getTotal: () => {
         return get().items.reduce(

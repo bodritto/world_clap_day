@@ -15,6 +15,8 @@ model Supporter {
   id            String   @id @default(cuid())
   name          String
   email         String?
+  country       String?  // Display name
+  countryCode   String?  // ISO 3166-1 alpha-2 for flag
   tier          String   @default("single-clap") // single-clap, clap-squad, clap-champion, etc.
   amount        Float?   // Amount paid
   paymentMethod String?  // stripe, paypal
@@ -41,9 +43,17 @@ model MailingListSubscriber {
 
 // Site statistics (for caching the clapper count)
 model SiteStats {
-  id            String   @id @default("main")
-  clapperCount  Int      @default(64241)
-  updatedAt     DateTime @updatedAt
+  id                  String   @id @default("main")
+  clapperCount        Int      @default(64241)  // total = sum of ClapperCountryCount.count
+  clapperCountFixed   Int      @default(64241)  // last value set manually; auto process runs from current
+  updatedAt           DateTime @updatedAt
+}
+
+// Per-country clapper counts (weighted by fixed distribution). Total clapper count = sum of these.
+model ClapperCountryCount {
+  countryCode String   @id // ISO 3166-1 alpha-2
+  count       Int      @default(0)
+  updatedAt   DateTime @updatedAt
 }
 
 // Admin users for the built-in CMS

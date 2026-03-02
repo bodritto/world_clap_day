@@ -37,7 +37,10 @@
     "consent": "I want to receive email updates about World Clap Day, including announcements and reminders. I can unsubscribe at any time.",
     "subscribe": "Subscribe",
     "subscribing": "Subscribing...",
-    "success": "You're in!"
+    "success": "You're in!",
+    "validationMessage": "Please enter a valid email and accept the consent above.",
+    "validationCheckbox": "Please check the box above.",
+    "validationEmail": "Please enter a valid email."
   },
   "worldTimes": {
     "date": "16th August 2026",
@@ -63,7 +66,27 @@
   },
   "donationCard": {
     "addToCart": "Add to Cart",
-    "addedToCart": "Added to Cart"
+    "addedToCart": "Added to Cart",
+    "smallDonation": "Small donation",
+    "bigDonation": "Big donation",
+    "whateverDonation": "Whatever you want",
+    "customAmountPlaceholder": "Amount",
+    "recommendMin": "Any amount welcome. We recommend at least {amount}.",
+    "currency": "Currency",
+    "smallBenefit": "Thanks for the donation. It really helps us.",
+    "bigBenefit": "REAL CLAP",
+    "whateverBenefit": "Whatever you're ready to donate, we'll be happy."
+  },
+  "donationForm": {
+    "currency": "Currency",
+    "chooseAmount": "Choose amount",
+    "otherAmount": "Other amount",
+    "payWithCard": "Support with Visa, MasterCard",
+    "redirecting": "Redirecting...",
+    "stripeDisclaimer": "All our payments processed by Stripe.",
+    "leftText1": "World Clap Day is a community driven initiative. Your support helps us build the platform, create media, and coordinate a truly global moment.",
+    "leftText2": "Thousands of people like you help us stand up for a healthy internet for all. We rely on support to carry out our mission. Will you support today?",
+    "supportLabel": "Support — {amount}"
   },
   "cart": {
     "title": "Your Cart",
@@ -94,15 +117,17 @@
     "paymentFailed": "Payment failed. Please try again."
   },
   "success": {
-    "title": "Thank You!",
-    "subtitle": "Your support means the world to us. You're now part of the global movement!",
-    "wallOfClapsTitle": "You're on the Wall of Claps!",
-    "wallOfClapsText": "Your name will appear on the Wall of Claps, joining thousands of supporters from around the world.",
-    "whatsNext": "What happens next?",
-    "step1": "You'll receive a confirmation email shortly",
-    "step2": "Your name will appear on the Wall of Claps",
-    "step3": "Share the movement with friends and family",
-    "step4": "Mark your calendar for World Clap Day!",
+    "title": "THANK YOU SO MUCH",
+    "subtitle": "For your donation — we are truly grateful.",
+    "wallIntro": "If you'd like us to add you to the Wall of Clappers, please enter your first and last name (we'll display only the first letter), your email, and your country.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "country": "Country",
+    "countryPlaceholder": "Search country...",
+    "previewCardTitle": "How you'll appear on the Wall",
+    "submit": "Add me to the Wall",
+    "submitSuccess": "You're on the Wall!",
     "returnHome": "Return Home",
     "shareOnX": "Share on X/Twitter"
   },
@@ -158,6 +183,7 @@
     "participants": "clappers",
     "selectOnMap": "Select a time zone in the list or click an area on the map.",
     "searchCityPlaceholder": "Search city...",
+    "stripeLabelsHint": "UTC",
     "hoursFromUtc": "{offset} hours from UTC"
   },
   "mainClock": {

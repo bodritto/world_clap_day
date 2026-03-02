@@ -6,7 +6,7 @@ function getStripe() {
   if (!stripeInstance) {
     const secretKey = process.env.STRIPE_SECRET_KEY
     if (!secretKey) {
-      throw new Error('STRIPE_SECRET_KEY is not configured')
+      throw new Error('STRIPE_SECRET_KEY is not configured (set in .env)')
     }
     stripeInstance = new Stripe(secretKey, {
       apiVersion: '2025-12-15.clover',
@@ -15,24 +15,35 @@ function getStripe() {
   return stripeInstance
 }
 
-export async function createCheckoutSession(items: Array<{
-  name: string
-  price: number
-  quantity: number
-}>, supporterName?: string) {
+export type StripeCurrency = 'eur' | 'usd' | 'gbp'
+
+/** Stripe minimum is 1 unit in most currencies (e.g. 1 cent USD). */
+const MIN_CENTS = 1
+
+export async function createCheckoutSession(
+  items: Array<{ name: string; price: number; quantity: number }>,
+  currency: StripeCurrency = 'eur',
+  supporterName?: string
+) {
   const stripe = getStripe()
-  
-  const lineItems = items.map((item) => ({
-    price_data: {
-      currency: 'usd',
-      product_data: {
-        name: item.name,
-        description: 'World Clap Day Support',
+
+  const lineItems = items.map((item) => {
+    const unitAmountCents = Math.round(item.price * 100)
+    if (unitAmountCents < MIN_CENTS) {
+      throw new Error(`Amount must be at least 0.01 ${currency.toUpperCase()}`)
+    }
+    return {
+      price_data: {
+        currency: currency.toLowerCase(),
+        product_data: {
+          name: item.name,
+          description: 'World Clap Day Support',
+        },
+        unit_amount: unitAmountCents,
       },
-      unit_amount: Math.round(item.price * 100),
-    },
-    quantity: item.quantity,
-  }))
+      quantity: item.quantity,
+    }
+  })
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],

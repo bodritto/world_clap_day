@@ -8,8 +8,9 @@ import AnimatedCounter from '@/components/AnimatedCounter'
 import EmailSubscriptionForm from '@/components/EmailSubscriptionForm'
 import SecondSectionAndMap from '@/components/SecondSectionAndMap'
 import WallOfClaps from '@/components/WallOfClaps'
-import { MapRefreshProvider } from '@/lib/MapRefreshContext'
-import { getClapperCount } from '@/lib/db'
+import { ClapperCountProvider } from '@/lib/ClapperCountContext'
+import { EmailFormProvider } from '@/lib/EmailFormContext'
+import { getClapperCount, getClapperCountsByCountry } from '@/lib/db'
 
 const defaultSettings = {
   countdownDate: '2026-08-15T12:00:00Z',
@@ -22,6 +23,8 @@ const defaultSettings = {
     reddit: 'https://reddit.com/r/worldclapday',
   },
 }
+
+export const dynamic = 'force-dynamic'
 
 const GRID_CLAPPERS_SIZE = 12 // 3×4 grid
 
@@ -51,18 +54,24 @@ export default async function HomePage({ params }: Props) {
 
   const supporters: typeof mockSupporters = mockSupporters
 
-  let supporterCount = defaultSettings.supporterCount
+  let initialTotal = defaultSettings.supporterCount
+  let initialCountryCounts: Record<string, number> = {}
   try {
-    supporterCount = await getClapperCount()
+    const [total, countryCounts] = await Promise.all([
+      getClapperCount(),
+      getClapperCountsByCountry(),
+    ])
+    initialTotal = total
+    initialCountryCounts = countryCounts
   } catch {
     console.log('Using default clapper count')
   }
-  const settings = { ...defaultSettings, supporterCount }
+  const settings = { ...defaultSettings, supporterCount: initialTotal }
 
   return (
-    <MapRefreshProvider>
+    <ClapperCountProvider initialTotal={initialTotal} initialCountryCounts={initialCountryCounts}>
       <HomePageContent settings={settings} supporters={supporters} />
-    </MapRefreshProvider>
+    </ClapperCountProvider>
   )
 }
 
@@ -92,6 +101,7 @@ function HomePageContent({
           />
         </div>
 
+        <EmailFormProvider>
         <div className="relative z-10 flex min-h-[100dvh] flex-col px-4 py-6 sm:py-8">
           {/* Upper content limited so "Join the Clap" heading stays visible on first screen */}
           <div className="flex max-h-[85dvh] min-h-0 flex-1 flex-col justify-center gap-6 sm:gap-8 max-w-4xl mx-auto w-full text-center pt-[6.3rem] sm:pt-[8.4rem] md:pt-[10.5rem] lg:pt-[12.6rem]">
@@ -102,11 +112,7 @@ function HomePageContent({
               {t('subtitle')}
             </p>
             <CountdownTimer targetDate={settings.countdownDate} />
-            <AnimatedCounter
-              targetValue={settings.supporterCount}
-              duration={2000}
-              title={tCounter('title')}
-            />
+            <AnimatedCounter duration={2000} title={tCounter('title')} />
           </div>
 
           {/* Join the Clap — block sits above black end; section height = 100dvh + block + padding */}
@@ -136,10 +142,11 @@ function HomePageContent({
             </div>
           </div>
         </div>
+        </EmailFormProvider>
       </section>
 
-      {/* Section 2 (90dvh). Timezone map with country coloring from supporters. */}
-      <SecondSectionAndMap supporters={supporters} />
+      {/* Section 2 (90dvh). Timezone map with country coloring from clapper counts. */}
+      <SecondSectionAndMap />
 
       {/* Section 3: Wall of Claps — third "page" ends here */}
       <section className="py-16 px-4 bg-white">
