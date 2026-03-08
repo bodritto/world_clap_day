@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/routing'
+import { Link, usePathname } from '@/i18n/routing'
 import { useCartStore } from '@/lib/store'
 import confetti from 'canvas-confetti'
 import CountrySelect, { type CountryOption } from '@/components/CountrySelect'
@@ -11,6 +11,7 @@ import WallClapperPreviewCard from '@/components/WallClapperPreviewCard'
 
 function SuccessContent() {
   const t = useTranslations('success')
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const clearCart = useCartStore((state) => state.clearCart)
   const sessionId = searchParams.get('session_id')
@@ -18,7 +19,6 @@ function SuccessContent() {
   const [mounted, setMounted] = useState(false)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
   const [country, setCountry] = useState<CountryOption | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -61,12 +61,16 @@ function SuccessContent() {
           session_id: sessionId,
           firstName: firstName.trim(),
           lastName: lastName.trim(),
-          email: email.trim() || undefined,
           countryCode: country?.code,
           countryName: country?.name,
         }),
       })
-      if (res.ok) setSubmitted(true)
+      if (res.ok) {
+        setSubmitted(true)
+        // Full page load so the home page fetches fresh supporters from DB (avoids router cache)
+        const base = (pathname ?? '').replace(/\/checkout\/success.*$/, '') || '/'
+        window.location.assign(window.location.origin + base + '#wall-of-clappers')
+      }
     } finally {
       setSubmitting(false)
     }
@@ -79,11 +83,17 @@ function SuccessContent() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3 text-center uppercase tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3 text-center tracking-tight">
           {t('title')}
         </h1>
+        <p className="text-lg text-muted text-center mb-2">
+          {t('line1')}
+        </p>
+        <p className="text-lg text-muted text-center mb-2">
+          {t('line2')}
+        </p>
         <p className="text-lg text-muted text-center mb-10">
-          {t('subtitle')}
+          {t('tagline')}
         </p>
 
         <p className="text-muted mb-6">
@@ -116,18 +126,6 @@ function SuccessContent() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
-              {t('email')}
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-border px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
-            />
-          </div>
-          <div>
             <label htmlFor="country" className="block text-sm font-medium text-foreground mb-1">
               {t('country')}
             </label>
@@ -150,15 +148,19 @@ function SuccessContent() {
           )}
         </form>
 
-        <p className="text-sm font-medium text-foreground mb-2">
-          {t('previewCardTitle')}
-        </p>
-        <WallClapperPreviewCard
-          firstName={firstName}
-          lastName={lastName}
-          email={email}
-          countryCode={country?.code ?? null}
-        />
+        <div className="flex flex-col items-center mb-8">
+          <p className="text-sm font-medium text-foreground mb-3">
+            {t('previewCardTitle')}
+          </p>
+          <div className="w-full max-w-[200px]">
+            <WallClapperPreviewCard
+              firstName={firstName}
+              lastName={lastName}
+              email=""
+              countryCode={country?.code ?? null}
+            />
+          </div>
+        </div>
 
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link

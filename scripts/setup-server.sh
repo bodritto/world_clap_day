@@ -16,6 +16,25 @@ APP_DIR="/var/www/$APP_NAME"
 DB_NAME="wcd"
 DB_USER="wcd"
 
+# Must run on the server (as root or with write access to /var/www)
+if ! mkdir -p "$APP_DIR" 2>/dev/null; then
+    echo "This script is for the server, not your local machine."
+    echo "Run it ON THE SERVER via SSH, for example:"
+    echo "  ssh root@YOUR_SERVER_IP 'bash -s' < scripts/setup-server.sh"
+    echo "Or from the server: curl -s ... | bash"
+    exit 1
+fi
+
+# Optional: copy production .env from this path (e.g. after: scp .env.production root@server:/tmp/.env.production)
+# Usage: ENV_FILE=/tmp/.env.production bash -s < scripts/setup-server.sh
+if [ -n "${ENV_FILE}" ] && [ -f "${ENV_FILE}" ]; then
+    echo "Copying env from ${ENV_FILE} to ${APP_DIR}/.env"
+    mkdir -p "$APP_DIR"
+    cp "${ENV_FILE}" "$APP_DIR/.env"
+    chmod 600 "$APP_DIR/.env"
+    echo "  → $APP_DIR/.env created from your file (DATABASE_URL below may be overwritten if we create DB)"
+fi
+
 echo "=========================================="
 echo "  Setting up $DOMAIN"
 echo "=========================================="
@@ -171,14 +190,18 @@ echo "  Server setup complete!"
 echo "=========================================="
 echo ""
 echo "Next steps:"
-echo "1. Add any extra secrets to $APP_DIR/.env (DATABASE_URL is already set for local Postgres)"
-echo "2. Run the deploy script from your local machine: ./scripts/deploy.sh"
-echo "3. After first deploy, run: certbot --nginx -d $DOMAIN"
+echo "1. (Optional) To use your production .env: copy it to the server and run with ENV_FILE:"
+echo "   scp .env.production $USER@this-server:/tmp/ && ssh ... 'ENV_FILE=/tmp/.env.production bash -s' < scripts/setup-server.sh"
+echo "   Or on first deploy use: ./scripts/deploy.sh --with-env (requires .env.production in project root)"
+echo "2. Add any extra secrets to $APP_DIR/.env if needed (DATABASE_URL is set for local Postgres unless you used ENV_FILE)"
+echo "3. Deploy from your machine: ./scripts/deploy.sh (or ./scripts/deploy.sh --with-env to push .env.production)"
+echo "4. Enable HTTPS (once): ssh root@THIS_SERVER 'certbot --nginx -d $DOMAIN'  # or: bash scripts/enable-https.sh"
 echo ""
 echo "App directory: $APP_DIR"
 echo "App port: $APP_PORT"
 echo "Domain: $DOMAIN"
-echo "Database: PostgreSQL local (user $DB_USER, database $DB_NAME, password in $APP_DIR/.db-password)"
+echo "Database: PostgreSQL on THIS server, localhost (user $DB_USER, database $DB_NAME, password in $APP_DIR/.db-password)"
+echo "  → DATABASE_URL in $APP_DIR/.env is set for this. Deploy with --with-env keeps this URL; only other vars come from .env.production."
 if command -v ss &>/dev/null && ss -tlnp 2>/dev/null | grep -q 5432; then
     echo ""
     echo "PostgreSQL listen check (must be 127.0.0.1 only):"

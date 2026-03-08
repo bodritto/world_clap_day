@@ -30,7 +30,7 @@ export function getCountriesList(): Array<{ code: string; name: string }> {
   const list = codes
     .filter((c) => /^[A-Z]{2}$/.test(c))
     .map((code) => ({ code, name: getRegionName(code) }))
-    .filter(({ name }) => name && name !== code)
+    .filter(({ name, code }) => name && name !== code)
   list.sort((a, b) => a.name.localeCompare(b.name))
   return list
 }

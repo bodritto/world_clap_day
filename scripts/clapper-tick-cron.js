@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 /**
- * Calls GET /api/cron/clapper-tick every 5 seconds to add 1–5 to the live clapper count
- * by incrementing per-country counts (weighted distribution). Total = sum of country counts.
+ * Calls GET /api/cron/clapper-tick every NEXT_PUBLIC_CLAPPER_TICK_INTERVAL_MS (default 5s)
+ * to add NEXT_PUBLIC_CLAPPER_ADD_MIN–MAX to the live clapper count (per-country, weighted).
  *
  * Usage:
  *   CRON_SECRET=your-secret BASE_URL=http://localhost:3000 node scripts/clapper-tick-cron.js
+ *   Optional: NEXT_PUBLIC_CLAPPER_TICK_INTERVAL_MS=5000 NEXT_PUBLIC_CLAPPER_ADD_MIN=1 NEXT_PUBLIC_CLAPPER_ADD_MAX=5
  */
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
 const CRON_SECRET = process.env.CRON_SECRET
-const INTERVAL_MS = 5000
+const INTERVAL_MS = parseInt(process.env.NEXT_PUBLIC_CLAPPER_TICK_INTERVAL_MS || '5000', 10)
 
 const url = `${BASE_URL.replace(/\/$/, '')}/api/cron/clapper-tick`
 const headers = {}

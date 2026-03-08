@@ -109,7 +109,7 @@ export default function TimezoneMapInline({
   supporters = [],
 }: TimezoneMapInlineProps) {
   const t = useTranslations('worldMap')
-  const { totalCount } = useClapperCount()
+  const { lastTickCountries, tickCount } = useClapperCount()
   const timezoneInfo = useTimezoneStore((s) => s.timezoneInfo)
   const setTimezone = useTimezoneStore((s) => s.setTimezone)
   const [selectedOffset, setSelectedOffset] = useState(0)
@@ -119,42 +119,42 @@ export default function TimezoneMapInline({
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false)
   const cityDropdownRef = useRef<HTMLDivElement>(null)
   const cityInputRef = useRef<HTMLInputElement>(null)
-  const [sparks, setSparks] = useState<
-    { id: number; x: number; y: number; createdAt: number }[]
-  >([])
-  const sparkIdRef = useRef(0)
-  const lastTotalRef = useRef(totalCount)
+  const [flashingNumericIds, setFlashingNumericIds] = useState<Set<string>>(new Set())
+  const prevTickCountRef = useRef(0)
+  const hasMountedRef = useRef(false)
 
-  // When the global clapper counter increases, spawn a few sparkles on the map.
+  // When a tick adds claps, flash those countries briefly.
   useEffect(() => {
-    if (totalCount <= lastTotalRef.current) {
-      lastTotalRef.current = totalCount
-      return
+    if (tickCount <= prevTickCountRef.current || lastTickCountries.length === 0) return
+    prevTickCountRef.current = tickCount
+    const ids = new Set<string>()
+    for (const code of lastTickCountries) {
+      const num = alpha2ToNumeric[code]
+      if (num) ids.add(num)
     }
-    const delta = totalCount - lastTotalRef.current
-    lastTotalRef.current = totalCount
-    const sparkCount = Math.min(Math.max(delta, 1), 3)
-    const now = Date.now()
-    setSparks((prev) => [
-      ...prev,
-      ...Array.from({ length: sparkCount }, () => ({
-        id: sparkIdRef.current++,
-        x: Math.random(),
-        y: Math.random(),
-        createdAt: now,
-      })),
-    ])
-  }, [totalCount])
+    setFlashingNumericIds(ids)
+    const t = setTimeout(() => setFlashingNumericIds(new Set()), 700)
+    return () => clearTimeout(t)
+  }, [tickCount, lastTickCountries])
 
-  // Drop old sparkles after their animation has finished.
+  // Demo flash shortly after mount so the effect is visible without waiting for first tick.
   useEffect(() => {
-    if (sparks.length === 0) return
-    const timeout = setTimeout(() => {
-      const cutoff = Date.now() - 1200
-      setSparks((prev) => prev.filter((s) => s.createdAt > cutoff))
-    }, 1300)
-    return () => clearTimeout(timeout)
-  }, [sparks.length])
+    if (hasMountedRef.current) return
+    hasMountedRef.current = true
+    const demoIds = new Set<string>()
+    ;['US', 'DE', 'BR'].forEach((code) => {
+      const num = alpha2ToNumeric[code]
+      if (num) demoIds.add(num)
+    })
+    const t1 = setTimeout(() => {
+      setFlashingNumericIds(demoIds)
+    }, 2000)
+    const t2 = setTimeout(() => setFlashingNumericIds(new Set()), 2700)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [])
 
   const countryCounts = useMemo(
     () =>
@@ -421,35 +421,22 @@ export default function TimezoneMapInline({
                 geographies.map((geo) => {
                   const id = String(geo.id)
                   const count = countryCounts[id] || 0
+                  const isFlashing = flashingNumericIds.has(id)
                   return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill={getCountryFill(count, maxCount)}
-                      stroke="#9ca3af"
-                      strokeWidth={0.5}
-                      style={{ default: { outline: 'none' }, hover: { outline: 'none' }, pressed: { outline: 'none' } }}
-                    />
+                    <g key={geo.rsmKey} className={isFlashing ? 'country-flash' : undefined}>
+                      <Geography
+                        geography={geo}
+                        fill={getCountryFill(count, maxCount)}
+                        stroke="#9ca3af"
+                        strokeWidth={0.5}
+                        style={{ default: { outline: 'none' }, hover: { outline: 'none' }, pressed: { outline: 'none' } }}
+                      />
+                    </g>
                   )
                 })
               }
             </Geographies>
           </ComposableMap>
-          {/* Sparkles indicating new claps */}
-          <div className="pointer-events-none absolute inset-0">
-            {sparks.map((spark) => (
-              <span
-                key={spark.id}
-                className="absolute rounded-full bg-amber-300 shadow-[0_0_12px_rgba(252,211,77,0.9)] spark-on-map"
-                style={{
-                  width: 10,
-                  height: 10,
-                  left: `${spark.x * 100}%`,
-                  top: `${spark.y * 100}%`,
-                }}
-              />
-            ))}
-          </div>
           {/* Stripe overlay: tap/click to select timezone (mobile + desktop) */}
           <div className="flex absolute inset-0 pointer-events-none">
             <div className="absolute inset-0 flex pointer-events-auto min-w-0">

@@ -98,6 +98,40 @@ export async function updateSupporterByPaymentId(
   })
 }
 
+/** Update or create supporter for the wall: if one exists with this paymentId, update; otherwise create (e.g. when webhook didn't run). */
+export async function upsertSupporterForWall(
+  paymentId: string,
+  data: { name: string; email?: string; country?: string; countryCode?: string }
+) {
+  if (!prisma) return null
+  const existing = await prisma.supporter.findFirst({ where: { paymentId } })
+  if (existing) {
+    await prisma.supporter.update({
+      where: { id: existing.id },
+      data: {
+        name: data.name,
+        email: data.email,
+        country: data.country,
+        countryCode: data.countryCode,
+      },
+    })
+    return existing.id
+  }
+  const created = await prisma.supporter.create({
+    data: {
+      name: data.name,
+      email: data.email,
+      country: data.country,
+      countryCode: data.countryCode,
+      paymentId,
+      paymentMethod: 'stripe',
+      tier: 'single-clap',
+    },
+  })
+  await incrementClapperCount()
+  return created.id
+}
+
 export async function getClapperCount(): Promise<number> {
   if (!prisma) {
     return 64241 // Default count
@@ -223,10 +257,11 @@ export async function incrementClapperCountByCountry(): Promise<{ countryCode: s
   return { countryCode, total: stats.clapperCount }
 }
 
-/** Add 1–5 to clapper count by country (weighted). Call every 5s from cron. Returns new total. */
+/** Add configurable min–max to clapper count by country (weighted). Call every CLAPPER_TICK_INTERVAL_MS from cron. Returns new total. */
 export async function incrementClapperCountRandom(): Promise<number> {
   if (!prisma) return 64241
-  const add = Math.floor(Math.random() * 5) + 1
+  const { getClapperAddPerTick } = await import('@/lib/clapperTickConfig')
+  const add = getClapperAddPerTick()
   let total = 0
   for (let i = 0; i < add; i++) {
     const r = await incrementClapperCountByCountry()
@@ -279,6 +314,25 @@ export async function getRecentSupporters(limit: number = 50) {
     select: {
       name: true,
       tier: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+  })
+}
+
+/** Supporters for Wall of Clappers: newest first (left to right, top to bottom). */
+export async function getSupportersForWall(limit: number = 50) {
+  if (!prisma) {
+    return []
+  }
+
+  return prisma.supporter.findMany({
+    select: {
+      id: true,
+      name: true,
+      country: true,
+      countryCode: true,
       createdAt: true,
     },
     orderBy: { createdAt: 'desc' },

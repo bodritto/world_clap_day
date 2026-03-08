@@ -17,7 +17,7 @@ export default function AnimatedCounter({
 }: AnimatedCounterProps) {
   const emailForm = useEmailForm()
   const localIncrement = emailForm?.hasEmailValue ? 1 : 0
-  const { totalCount } = useClapperCount()
+  const { totalCount, hasSyncedWithServer } = useClapperCount()
   const [displayCount, setDisplayCount] = useState(0)
   const [hasAnimated, setHasAnimated] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
@@ -37,8 +37,14 @@ export default function AnimatedCounter({
     requestAnimationFrame(updateCount)
   }, [duration])
 
-  // On first view: animate from 0 to initial total (from context)
+  // On first view: animate from 0 to total only after we have the real count from the server.
+  // Otherwise we'd animate to the SSR fallback (e.g. 64241) and then jump to the real value (e.g. 247000).
   useEffect(() => {
+    if (!hasSyncedWithServer || hasAnimated) return
+
+    const el = counterRef.current
+    if (!el) return
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !hasAnimated) {
@@ -48,10 +54,9 @@ export default function AnimatedCounter({
       },
       { threshold: 0.3 }
     )
-
-    if (counterRef.current) observer.observe(counterRef.current)
+    observer.observe(el)
     return () => observer.disconnect()
-  }, [hasAnimated, totalCount, animateTo])
+  }, [hasAnimated, hasSyncedWithServer, totalCount, animateTo])
 
   // After animation done, keep display in sync with context (ticks every 5s)
   useEffect(() => {

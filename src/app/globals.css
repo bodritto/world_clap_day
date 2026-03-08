@@ -156,23 +156,18 @@ html {
 .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
 .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
 
-@keyframes spark-pop {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.4);
+/* Brief flash when a country gets a clap on the map */
+@keyframes country-flash {
+  0%, 100% {
+    filter: brightness(1);
   }
-  30% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.8);
+  40% {
+    filter: brightness(2.2);
   }
 }
 
-.spark-on-map {
-  transform: translate(-50%, -50%);
-  animation: spark-pop 0.9s ease-out forwards;
+.country-flash {
+  animation: country-flash 0.7s ease-out;
+  transform-origin: center;
 }
 

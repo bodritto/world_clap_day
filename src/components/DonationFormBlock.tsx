@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/routing'
 import { useCartStore } from '@/lib/store'
 import { formatPrice, getCurrencySymbol, type DonationCurrency } from '@/lib/utils'
-import { CreditCard } from 'lucide-react'
 import { useState } from 'react'
 
 const CURRENCIES: { value: DonationCurrency; label: string }[] = [
@@ -36,7 +35,7 @@ export default function DonationFormBlock({ imageUrl }: Props) {
       : selectedAmount
   const isValid = Number.isFinite(amount) && amount >= MIN_CUSTOM
 
-  const handlePayWithCard = () => {
+  const handleContinueToCheckout = () => {
     if (!isValid) return
     setIsSubmitting(true)
     const name = t('supportLabel', { amount: formatPrice(amount, currency) })
@@ -48,6 +47,7 @@ export default function DonationFormBlock({ imageUrl }: Props) {
       },
       currency
     )
+    // Открываем чекаут сразу с добавленным в корзину заказом
     router.push('/checkout')
     setIsSubmitting(false)
   }
@@ -147,12 +147,11 @@ export default function DonationFormBlock({ imageUrl }: Props) {
         <div className="flex flex-col items-center shrink-0">
           <button
             type="button"
-            onClick={handlePayWithCard}
+            onClick={handleContinueToCheckout}
             disabled={!isValid || isSubmitting}
             className="w-full py-4 px-6 bg-[#635BFF] hover:bg-[#5046e5] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl font-medium flex items-center justify-center gap-3 transition-colors"
           >
-            <CreditCard className="w-5 h-5" aria-hidden />
-            {isSubmitting ? t('redirecting') : t('payWithCard')}
+            {isSubmitting ? t('redirecting') : t('continueToCheckout')}
           </button>
           <p className="text-xs text-muted mt-2 text-center">{t('stripeDisclaimer')}</p>
         </div>

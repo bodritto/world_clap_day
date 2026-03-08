@@ -14,9 +14,12 @@ interface CartStore {
   items: CartItem[]
   /** Currency for the whole cart (set when first item is added). */
   currency: DonationCurrency | null
+  /** Name for Wall of Claps (can be set on donation form or checkout). */
+  supporterName: string
   addItem: (item: Omit<CartItem, 'quantity'>, currency?: DonationCurrency) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
+  setSupporterName: (name: string) => void
   clearCart: () => void
   getTotal: () => number
   getItemCount: () => number
@@ -56,6 +59,7 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       currency: null,
+      supporterName: '',
 
       addItem: (item, currency) => {
         const state = get()
@@ -94,8 +98,10 @@ export const useCartStore = create<CartStore>()(
           ),
         })
       },
-      
-      clearCart: () => set({ items: [], currency: null }),
+
+      setSupporterName: (name) => set({ supporterName: name }),
+
+      clearCart: () => set({ items: [], currency: null, supporterName: '' }),
       
       getTotal: () => {
         return get().items.reduce(

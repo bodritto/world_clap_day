@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 /**
- * Seed ClapperCountryCount and SiteStats with 200,100 clappers:
- * - 50% (100,050) across top 12 countries: US, CA, AR, BR, AU, MX, DE, PT, ES, IT, JP, CL (descending).
- * - 50% (100,050) across the rest of the distribution countries.
+ * Seed ClapperCountryCount and SiteStats with a total clapper count.
+ * If the DB is empty, the site shows a default count until you run this script
+ * or set the value in Admin → Clapper Count → Save.
  *
- * After running, cron and frontend continue to use the same distribution (50/50 top/rest).
+ * Distribution: 50% across top 12 countries, 50% across the rest.
  *
  * Usage:
- *   DATABASE_URL="..." node scripts/seed-clapper-counts.cjs
+ *   DATABASE_URL="..." node scripts/seed-clapper-counts.cjs [TOTAL]
+ *   node scripts/seed-clapper-counts.cjs 247512
  *   node scripts/seed-clapper-counts.cjs --dry-run
  *
- * On production server (after deploy):
- *   ssh root@tachka "cd /var/www/wcd && export \$(cat .env | xargs) && node scripts/seed-clapper-counts.cjs"
- * Or SSH in, then: cd /var/www/wcd && export $(cat .env | xargs) && node scripts/seed-clapper-counts.cjs
+ * On production (empty DB): cd /var/www/wcd && export $(cat .env | xargs) && node scripts/seed-clapper-counts.cjs 247512
  */
 
 require('dotenv/config')
 
-const TARGET_TOTAL = 200100
+const totalArg = process.argv.find((a) => a !== '--dry-run' && /^\d+$/.test(a))
+const TARGET_TOTAL = totalArg ? parseInt(totalArg, 10) : 200100
 const HALF = Math.floor(TARGET_TOTAL / 2) // 100050
 
 // Top 12: descending weight (12, 11, …, 1). Sum = 78.
@@ -88,6 +88,7 @@ function distribute(total, items, weightSum) {
 async function main() {
   const dryRun = process.argv.includes('--dry-run')
   if (dryRun) {
+    console.log('Target total:', TARGET_TOTAL)
     const topEntries = distribute(HALF, TOP_12, TOP_12_SUM)
     const otherEntries = distribute(HALF, OTHERS, OTHERS_SUM)
     const topSum = topEntries.reduce((s, e) => s + e.count, 0)

@@ -16,10 +16,10 @@ export default function Header() {
   const [mounted, setMounted] = useState(false)
 
   const navLinks = [
-    { href: "/support-us" as const, label: t("supportUs") },
+    { href: "/our-mission" as const, label: t("mission") },
     { href: "/partners" as const, label: t("partners") },
+    { href: "/press" as const, label: t("press") },
     { href: "/cart" as const, label: t("cart") },
-    { href: "/checkout" as const, label: t("checkout") },
   ]
 
   useEffect(() => {

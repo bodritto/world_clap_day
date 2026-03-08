@@ -20,20 +20,23 @@ interface WallClapperPreviewCardProps {
   countryCode: string | null
 }
 
-/** Preview of how the user will appear on the Wall of Clappers: first initial(s) + email + flag */
+/** Preview: full first name + first letter of last name + period, e.g. "Pupa L." */
 export default function WallClapperPreviewCard({
   firstName,
   lastName,
-  email,
+  email: _email,
   countryCode,
 }: WallClapperPreviewCardProps) {
-  const initial =
-    [firstName.trim(), lastName.trim()]
-      .filter(Boolean)
-      .map((s) => s[0]?.toUpperCase() ?? '')
-      .join('. ') + (firstName || lastName ? '.' : '')
+  const first = firstName.trim()
+  const last = lastName.trim()
+  const displayName =
+    first && last
+      ? `${first} ${(last[0] ?? '').toUpperCase()}.`
+      : first || last
+      ? `${first || last}.`
+      : ''
 
-  const hasAny = initial || email || countryCode
+  const hasAny = displayName || countryCode
 
   if (!hasAny) {
     return (
@@ -48,9 +51,7 @@ export default function WallClapperPreviewCard({
     <div className="flex flex-col items-center text-center p-6 rounded-2xl border border-border bg-white">
       <ClapIcon />
       <div className="mt-2 text-foreground font-bold text-sm">
-        {initial && <span>{initial}</span>}
-        {initial && email && ' · '}
-        {email && <span className="font-normal text-muted">{email}</span>}
+        {displayName && <span>{displayName}</span>}
       </div>
       {countryCode && (
         <span

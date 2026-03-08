@@ -16,6 +16,7 @@
 
 require('dotenv/config')
 
+const { randomUUID } = require('crypto')
 const { Pool } = require('pg')
 
 // -----------------------------
@@ -149,17 +150,18 @@ function pick(arr) {
 }
 
 async function insertBatch(client, rows) {
-  // rows: Array<{ city, country, countryCode, createdAt }>
+  // rows: Array<{ id, city, country, countryCode, createdAt }>
   const values = []
   const placeholders = []
+  const cols = 5
   for (let i = 0; i < rows.length; i++) {
-    const base = i * 4
-    placeholders.push(`($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4})`)
-    values.push(rows[i].city, rows[i].country, rows[i].countryCode, rows[i].createdAt)
+    const base = i * cols
+    placeholders.push(`($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5})`)
+    values.push(rows[i].id, rows[i].city, rows[i].country, rows[i].countryCode, rows[i].createdAt)
   }
 
   const sql = `
-    INSERT INTO "UserLocation" ("city", "country", "countryCode", "createdAt")
+    INSERT INTO "UserLocation" ("id", "city", "country", "countryCode", "createdAt")
     VALUES ${placeholders.join(',')}
   `
 
@@ -200,6 +202,7 @@ async function main() {
         const rows = new Array(take)
         for (let j = 0; j < take; j++) {
           rows[j] = {
+            id: randomUUID(),
             city: pick(c.cities),
             country: c.name,
             countryCode: c.code,

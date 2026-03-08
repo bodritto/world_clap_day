@@ -8,9 +8,10 @@ import AnimatedCounter from '@/components/AnimatedCounter'
 import EmailSubscriptionForm from '@/components/EmailSubscriptionForm'
 import SecondSectionAndMap from '@/components/SecondSectionAndMap'
 import WallOfClaps from '@/components/WallOfClaps'
+import ScrollToHash from '@/components/ScrollToHash'
 import { ClapperCountProvider } from '@/lib/ClapperCountContext'
 import { EmailFormProvider } from '@/lib/EmailFormContext'
-import { getClapperCount, getClapperCountsByCountry } from '@/lib/db'
+import { getClapperCount, getClapperCountsByCountry, getSupportersForWall } from '@/lib/db'
 
 const defaultSettings = {
   countdownDate: '2026-08-15T12:00:00Z',
@@ -28,21 +29,13 @@ export const dynamic = 'force-dynamic'
 
 const GRID_CLAPPERS_SIZE = 12 // 3×4 grid
 
-// Mock supporters to fill the grid when DB has fewer (or for demo)
-const mockSupporters = [
-  { _id: 'mock-1', name: 'Anna K.', country: 'Germany', countryCode: 'DE', _createdAt: '2024-01-15' },
-  { _id: 'mock-2', name: 'David M.', country: 'United States', countryCode: 'US', _createdAt: '2024-01-14' },
-  { _id: 'mock-3', name: 'Maria S.', country: 'Spain', countryCode: 'ES', _createdAt: '2024-01-13' },
-  { _id: 'mock-4', name: 'John L.', country: 'United Kingdom', countryCode: 'GB', _createdAt: '2024-01-12' },
-  { _id: 'mock-5', name: 'Yuki T.', country: 'Japan', countryCode: 'JP', _createdAt: '2024-01-11' },
-  { _id: 'mock-6', name: 'Sophie L.', country: 'France', countryCode: 'FR', _createdAt: '2024-01-10' },
-  { _id: 'mock-7', name: 'Luca B.', country: 'Italy', countryCode: 'IT', _createdAt: '2024-01-09' },
-  { _id: 'mock-8', name: 'Emma W.', country: 'Canada', countryCode: 'CA', _createdAt: '2024-01-08' },
-  { _id: 'mock-9', name: 'James O.', country: 'Australia', countryCode: 'AU', _createdAt: '2024-01-07' },
-  { _id: 'mock-10', name: 'Olga P.', country: 'Poland', countryCode: 'PL', _createdAt: '2024-01-06' },
-  { _id: 'mock-11', name: 'Carlos R.', country: 'Brazil', countryCode: 'BR', _createdAt: '2024-01-05' },
-  { _id: 'mock-12', name: 'Priya N.', country: 'India', countryCode: 'IN', _createdAt: '2024-01-04' },
-]
+type WallSupporter = {
+  _id: string
+  name: string
+  country?: string
+  countryCode?: string
+  _createdAt: string
+}
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -52,19 +45,26 @@ export default async function HomePage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
 
-  const supporters: typeof mockSupporters = mockSupporters
-
+  let supporters: WallSupporter[] = []
   let initialTotal = defaultSettings.supporterCount
   let initialCountryCounts: Record<string, number> = {}
   try {
-    const [total, countryCounts] = await Promise.all([
+    const [wallRows, total, countryCounts] = await Promise.all([
+      getSupportersForWall(GRID_CLAPPERS_SIZE),
       getClapperCount(),
       getClapperCountsByCountry(),
     ])
+    supporters = wallRows.map((s) => ({
+      _id: s.id,
+      name: s.name,
+      country: s.country ?? undefined,
+      countryCode: s.countryCode ?? undefined,
+      _createdAt: s.createdAt.toISOString(),
+    }))
     initialTotal = total
     initialCountryCounts = countryCounts
-  } catch {
-    console.log('Using default clapper count')
+  } catch (err) {
+    console.error('Homepage: using default clapper count (DB unavailable or error)', err)
   }
   const settings = { ...defaultSettings, supporterCount: initialTotal }
 
@@ -80,7 +80,7 @@ function HomePageContent({
   supporters,
 }: {
   settings: typeof defaultSettings
-  supporters: typeof mockSupporters
+  supporters: WallSupporter[]
 }) {
   const t = useTranslations('home')
   const tCounter = useTranslations('counter')
@@ -149,7 +149,8 @@ function HomePageContent({
       <SecondSectionAndMap />
 
       {/* Section 3: Wall of Claps — third "page" ends here */}
-      <section className="py-16 px-4 bg-white">
+      <section id="wall-of-clappers" className="py-16 px-4 bg-white scroll-mt-20">
+        <ScrollToHash id="wall-of-clappers" />
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-center">
             {tSupport('wallOfClaps')}

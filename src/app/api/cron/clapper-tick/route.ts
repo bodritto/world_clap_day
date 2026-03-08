@@ -5,7 +5,8 @@ export const dynamic = 'force-dynamic'
 export const maxDuration = 10
 
 /**
- * Call this route every 5 seconds to add a random 1–5 to the live clapper count (by country, weighted distribution).
+ * Call this route every NEXT_PUBLIC_CLAPPER_TICK_INTERVAL_MS (default 5s) to add a random MIN–MAX
+ * (NEXT_PUBLIC_CLAPPER_ADD_MIN/MAX) to the live clapper count (by country, weighted distribution).
  * Protect with CRON_SECRET: send header "Authorization: Bearer <CRON_SECRET>" or "x-cron-secret: <CRON_SECRET>".
  */
 export async function GET(request: NextRequest) {
