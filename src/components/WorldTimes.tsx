@@ -171,7 +171,7 @@ export default function WorldTimes() {
           <strong>{t('clappersWallText')}</strong>
         </p>
         <Link
-          href="/support-us"
+          href="/get-involved#donate"
           className="inline-block px-6 py-2.5 bg-primary text-white rounded-full font-medium hover:bg-primary-dark transition-colors"
         >
           {t('supportUs')}

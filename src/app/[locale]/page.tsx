@@ -160,7 +160,7 @@ function HomePageContent({
           </p>
           <div className="flex justify-center mb-10">
             <Link
-              href="/support-us"
+              href="/get-involved#donate"
               className="px-8 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary-dark transition-colors"
             >
               {tSupport('getOnTheWall')}
@@ -180,7 +180,7 @@ function HomePageContent({
             {t('missionText')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/support-us" className="btn-primary">
+            <Link href="/get-involved#donate" className="btn-primary">
               {t('joinMovement')}
             </Link>
             <Link

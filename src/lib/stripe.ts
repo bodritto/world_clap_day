@@ -28,7 +28,9 @@ const MIN_CENTS = 1
 export async function createCheckoutSession(
   items: Array<{ name: string; price: number; quantity: number }>,
   currency: StripeCurrency = 'eur',
-  supporterName?: string
+  supporterName?: string,
+  extraMetadata?: Record<string, string>,
+  shippingCountries?: readonly string[]
 ) {
   const stripe = getStripe()
 
@@ -42,7 +44,10 @@ export async function createCheckoutSession(
         currency: currency.toLowerCase(),
         product_data: {
           name: item.name,
-          description: 'World Clap Day Support',
+          description:
+            extraMetadata?.order_type === 'merch'
+              ? 'World Clap Day Merch'
+              : 'World Clap Day Support',
         },
         unit_amount: unitAmountCents,
       },
@@ -65,7 +70,17 @@ export async function createCheckoutSession(
     cancel_url: `${siteUrl}/checkout?canceled=true`,
     metadata: {
       supporterName: supporterName || 'Anonymous',
+      ...extraMetadata,
     },
+    ...(shippingCountries && shippingCountries.length > 0
+      ? {
+          shipping_address_collection: {
+            allowed_countries:
+              shippingCountries as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[],
+          },
+          phone_number_collection: { enabled: true },
+        }
+      : {}),
   })
 
   return session
@@ -73,7 +88,11 @@ export async function createCheckoutSession(
 
 export async function retrieveSession(sessionId: string) {
   const stripe = getStripe()
-  return stripe.checkout.sessions.retrieve(sessionId)
+  // Note: shipping_details and customer_details are top-level fields on the
+  // session and do NOT need expansion — only line_items is a nested list.
+  return stripe.checkout.sessions.retrieve(sessionId, {
+    expand: ['line_items'],
+  })
 }
 
 export function constructWebhookEvent(

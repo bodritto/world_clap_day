@@ -19,6 +19,8 @@ export default function Header() {
     { href: "/our-mission" as const, label: t("mission") },
     { href: "/partners" as const, label: t("partners") },
     { href: "/press" as const, label: t("press") },
+    { href: "/get-involved" as const, label: t("getInvolved") },
+    { href: "/merch" as const, label: t("merch") },
     { href: "/cart" as const, label: t("cart") },
   ]
 

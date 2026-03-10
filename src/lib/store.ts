@@ -8,6 +8,11 @@ export interface CartItem {
   price: number
   quantity: number
   image?: string
+  /** Printify-specific fields — only present for merch items */
+  printifyProductId?: string
+  printifyVariantId?: number
+  /** Human-readable variant label, e.g. "M / Black" */
+  variantLabel?: string
 }
 
 interface CartStore {

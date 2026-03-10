@@ -39,6 +39,8 @@ function CheckoutContent() {
             name: item.name,
             price: item.price,
             quantity: item.quantity,
+            printifyProductId: item.printifyProductId,
+            printifyVariantId: item.printifyVariantId,
           })),
           supporterName: (supporterName ?? '').trim() || 'Anonymous',
           currency,
@@ -85,7 +87,7 @@ function CheckoutContent() {
             {t('emptyCartText')}
           </p>
           <Link
-            href="/support-us"
+            href="/get-involved#donate"
             className="inline-flex items-center gap-2 btn-primary"
           >
             <ArrowLeft size={18} />

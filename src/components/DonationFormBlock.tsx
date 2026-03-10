@@ -18,9 +18,11 @@ const MIN_CUSTOM = 1
 type Props = {
   /** Optional image URL for the left column; if not set, shows text only. */
   imageUrl?: string | null
+  /** Skip the checkout review page and go directly to Stripe. */
+  directCheckout?: boolean
 }
 
-export default function DonationFormBlock({ imageUrl }: Props) {
+export default function DonationFormBlock({ imageUrl, directCheckout }: Props) {
   const t = useTranslations('donationForm')
   const router = useRouter()
   const addItem = useCartStore((state) => state.addItem)
@@ -28,6 +30,7 @@ export default function DonationFormBlock({ imageUrl }: Props) {
   const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(10)
   const [customAmount, setCustomAmount] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const amount =
     selectedAmount === 'other'
@@ -35,9 +38,10 @@ export default function DonationFormBlock({ imageUrl }: Props) {
       : selectedAmount
   const isValid = Number.isFinite(amount) && amount >= MIN_CUSTOM
 
-  const handleContinueToCheckout = () => {
+  const handleContinueToCheckout = async () => {
     if (!isValid) return
     setIsSubmitting(true)
+    setError(null)
     const name = t('supportLabel', { amount: formatPrice(amount, currency) })
     addItem(
       {
@@ -47,7 +51,31 @@ export default function DonationFormBlock({ imageUrl }: Props) {
       },
       currency
     )
-    // Открываем чекаут сразу с добавленным в корзину заказом
+
+    if (directCheckout) {
+      try {
+        const res = await fetch('/api/stripe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: [{ name, price: amount, quantity: 1 }],
+            supporterName: 'Anonymous',
+            currency,
+          }),
+        })
+        const data = await res.json()
+        if (data.error) throw new Error(data.error)
+        if (data.url) {
+          window.location.href = data.url
+          return
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Something went wrong')
+        setIsSubmitting(false)
+        return
+      }
+    }
+
     router.push('/checkout')
     setIsSubmitting(false)
   }
@@ -144,6 +172,9 @@ export default function DonationFormBlock({ imageUrl }: Props) {
             )}
         </div>
 
+        {error && (
+          <p className="text-xs text-red-600 text-center">{error}</p>
+        )}
         <div className="flex flex-col items-center shrink-0">
           <button
             type="button"

@@ -51,7 +51,7 @@ export default function CartPage() {
             {t('emptyText')}
           </p>
           <Link
-            href="/support-us"
+            href="/get-involved#donate"
             className="inline-flex items-center gap-2 btn-primary"
           >
             <ArrowLeft size={18} />
@@ -93,7 +93,7 @@ export default function CartPage() {
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
-              href="/support-us"
+              href="/get-involved#donate"
               className="flex-1 py-3 px-6 rounded-full border-2 border-border text-muted hover:border-primary hover:text-primary transition-colors font-medium text-center"
             >
               {t('continueBrowsing')}
