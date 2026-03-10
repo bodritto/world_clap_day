@@ -6,6 +6,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import '../globals.css'
 
 const geistSans = Geist({
@@ -69,6 +70,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden flex flex-col min-h-screen`}>
+        <GoogleAnalytics />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           <main className="flex-1 min-h-0 pt-20 flex flex-col">{children}</main>
